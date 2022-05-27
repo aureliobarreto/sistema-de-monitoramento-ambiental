@@ -11,7 +11,7 @@
 #include <lcd.h>
 
 //Pinagem das chaves
-#define chave_0 15
+#define chave_0 4
 #define chave_1 17
 #define chave_2 27
 #define chave_3 22
