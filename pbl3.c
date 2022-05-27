@@ -10,6 +10,20 @@
 #include <wiringPi.h>
 #include <lcd.h>
 
+//Pinagem das chaves
+#define chave_0 15
+#define chave_1 17
+#define chave_2 27
+#define chave_3 22
+
+//Pinagem dos bottões
+#define botao_0 5
+#define botao_1 19
+#define botao_2 26
+
+//Pino do LED
+#define LED 13
+
 char teste = "Teste 01!";
 
 void bmp(){ // Função para leitura de pressão atmosférica do sensor BMP180 ou BMP085
