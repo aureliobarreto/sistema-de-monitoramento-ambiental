@@ -1,4 +1,4 @@
-/* CODE TO COMPILE
+/* COMPILAR O PROJETO
     gcc -Wall -o pbl3 pbl3.c -lwiringPi
     sudo ./pbl3
 */
