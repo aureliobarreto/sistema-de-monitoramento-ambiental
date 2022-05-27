@@ -1,3 +1,9 @@
+/* CODE TO COMPILE
+    gcc -Wall -o pbl3 pbl3.c -lwiringPi
+    sudo ./pbl3
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -77,12 +83,16 @@ void ldr(){ // Função para leitura de luminosidade do sensor LDR
 }
 
 void lcd(char data){ // Função para impressão de dados no LCD
+    /* 
+    Pinagem utilizada nas placas no LEDs
+    */
+
     #define LCD_RS  25               
-    #define LCD_E   24               
-    #define LCD_D4  23               
-    #define LCD_D5  22               
-    #define LCD_D6  21               
-    #define LCD_D7  14                            
+    #define LCD_E   1               
+    #define LCD_D4  12               
+    #define LCD_D5  16               
+    #define LCD_D6  20               
+    #define LCD_D7  21                            
 
     int lcd;
     lcd = lcdInit (2, 16, 4, LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7, 0, 0, 0, 0);
