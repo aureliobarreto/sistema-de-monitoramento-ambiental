@@ -44,63 +44,70 @@ const int botao_2 = 37;
 #define LCD_D7  29 
 
 //Pinagem DHT11
-#define TEMPO 85
-#define DHT	16
+#define MAXTIMINGS 85
+#define DHTPIN 18
 
-char pbl3[16] = "## PBL 3 ##";
+int lcd1;
+int dht11_dat[5] = {0, 0, 0, 0, 0};
+
+char pbl3[16] = " ## PBL 3 ##";
 
 
-void dht11(){ // Função para leitura de temperatura e humidade do sensor DHT11
-    int data[5] = {0, 0, 0, 0, 0};
+void read_dht11_dat()
+{
+        uint8_t laststate = HIGH;
+        uint8_t counter = 0;
+        uint8_t j = 0, i;
+        float f; 
 
-    uint8_t laststate	= HIGH;
-	uint8_t counter		= 0;
-	uint8_t j			= 0, i;
-	data[0] = data[1] = data[2] = data[3] = data[4] = 0;
+        dht11_dat[0] = dht11_dat[1] = dht11_dat[2] = dht11_dat[3] = dht11_dat[4] = 0;
 
-    pinMode(DHT, OUTPUT);
-	digitalWrite( DHT, LOW );
-	delay( 18 );
+        pinMode(DHTPIN, OUTPUT);
+        digitalWrite(DHTPIN, LOW);
+        delay(18);
+        
+        digitalWrite(DHTPIN, HIGH);
+        delayMicroseconds(40);
+        
+        pinMode(DHTPIN, INPUT);
 
-    pinMode(DHT, INPUT);
+        for (i = 0; i < MAXTIMINGS; i++)
+        {
+                counter = 0;
+                while (digitalRead(DHTPIN) == laststate)
+                {
+                        counter++;
+                        delayMicroseconds(1);
+                        if (counter == 255)
+                        {
+                                break;
+                        }
+                }
+                laststate = digitalRead(DHTPIN);
 
-    for (i = 0; i < TEMPO; i++){
-        counter = 0;
-        while (digitalRead(DHT) == laststate){
-			counter++;
-			delayMicroseconds(1);
-			if (counter == 255){
-				break;
-			}
-		}
-		laststate = digitalRead(DHT);
-        if ( counter == 255 ){
-		    break;
+                if (counter == 255)
+                        break;
+
+                if ((i >= 4) && (i % 2 == 0))
+                {
+                        dht11_dat[j / 8] <<= 1;
+                        if (counter > 16)
+                                dht11_dat[j / 8] |= 1;
+                        j++;
+                }
+         }
+
+        if ((j >= 40) && (dht11_dat[4] == ((dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF)))
+        {
+                f = dht11_dat[2] * 9. / 5. + 32;
+
+                lcdPosition(lcd1, 0, 0);
+                lcdPrintf(lcd1, "Humidity: %d.%d %%\n", dht11_dat[0], dht11_dat[1]);
+
+                lcdPosition(lcd1, 0, 1);
+                //lcdPrintf(lcd, "Temp: %d.0 C", dht11_dat[2]); //Uncomment for Celsius
+                lcdPrintf(lcd1, "Temp: %.1f F", f); //Comment out for Celsius
         }
-        if ( (i >= 4) && (i % 2 == 0) ){
-			data[j / 8] <<= 1;
-			if ( counter > 16 )
-				data[j/8] |= 1;
-			j++;
-		}
-    }
-    if ( (j >= 40) && (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xFF))){
-		float h = (float)((data[0] << 8) + data[1]) / 10;
-		if ( h > 100 ){
-			h = data[0];
-		}
-		float c = (float)(((data[2] & 0x7F) << 8) + data[3]) / 10;
-		if ( c > 125 ){
-			c = data[2];
-		}
-		if ( data[2] & 0x80 ){
-			c = -c;
-		}
-		float f = c * 1.8f + 32;
-		printf( "Umidade = %.1f %% Temperatura = %.1f *C (%.1f *F)\n", h, c, f );
-	}else{
-		printf( "Sensor com problemas!\n" );
-	}
 }
 
 // ############################################################################################################################
@@ -214,7 +221,6 @@ void ldr(){ // Função para leitura de luminosidade do sensor LDR
 	}
 	setI2CSlave(0x48);
 	printf("Luminosidade: %.2f\n", readVoltage(0));
-    printf("Pressão: %.2f\n", readVoltage(1));
     temp = readVoltage(0);
     char array[10];
     sprintf(array, "%.2f", temp);
@@ -230,8 +236,8 @@ void bmp(){ // Função para leitura de pressão atmosférica do sensor BMP180 o
 		printf("BPM não está sendo lido!\n");
 	}
     setI2CSlave(0x48);
-	printf("Pressão: %.2f\n", readVoltage(2));
-    temp2 = readVoltage(2);
+	printf("Pressão: %.2f\n", readVoltage(1));
+    temp2 = readVoltage(1);
     char array[10];
     sprintf(array, "%.2f", temp2);
     strcat(strcpy(pressao, "Press: "), array);
@@ -239,10 +245,6 @@ void bmp(){ // Função para leitura de pressão atmosférica do sensor BMP180 o
 }
 
 
-
-void mqtt(){ // Função para envio de informações via protocolo MQTT
-
-}
 
 int main(){ // Função principal do sistema
     wiringPiSetup();
@@ -252,18 +254,12 @@ int main(){ // Função principal do sistema
 
     while (1)
     {
-        //dht11();
-        if (digitalRead(botao_1) == HIGH)
-        {
-            ldr();
-            delay(2000);
-        }else if (digitalRead(botao_2) == HIGH)
-        {
-            bmp();
-            delay(2000);
-        }else{
-            lcd(pbl3);
-        }       
+        read_dht11_dat();
+        delay(2000);
+        ldr();
+        delay(2000);
+        bmp();
+        delay(2000);  
         system("clear");
     }
     return 0;
