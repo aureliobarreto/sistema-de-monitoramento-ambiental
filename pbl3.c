@@ -87,6 +87,7 @@ void read_dht11_dat()
 
                 if (counter == 255)
                         break;
+<<<<<<< HEAD
 
                 if ((i >= 4) && (i % 2 == 0))
                 {
@@ -97,6 +98,18 @@ void read_dht11_dat()
                 }
          }
 
+=======
+
+                if ((i >= 4) && (i % 2 == 0))
+                {
+                        dht11_dat[j / 8] <<= 1;
+                        if (counter > 16)
+                                dht11_dat[j / 8] |= 1;
+                        j++;
+                }
+         }
+
+>>>>>>> 437f7133c45e9bc04aed503e87010476afc95a38
         if ((j >= 40) && (dht11_dat[4] == ((dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF)))
         {
                 f = dht11_dat[2] * 9. / 5. + 32;
@@ -137,6 +150,7 @@ int setI2CSlave(unsigned char deviceAddr)
 		return 1;
 	}
 
+<<<<<<< HEAD
 }
 
 float readVoltage(int channel)
@@ -199,6 +213,70 @@ float readVoltage(int channel)
 	return voltage;
 }
 
+=======
+}
+
+float readVoltage(int channel)
+{
+	unsigned char readBuf[2] = {0};
+	unsigned int analogVal;
+	float voltage;
+	unsigned int config = 0;
+
+	config = 	CONFIG_REG_OS_SINGLE		|
+				CONFIG_REG_PGA_4_096V 		|
+				CONFIG_REG_MODE_SINGLE 		|
+				CONFIG_REG_DR_128SPS 			|
+				CONFIG_REG_CMODE_TRAD 		|
+				CONFIG_REG_CPOL_ACTIV_LOW 	|
+				CONFIG_REG_CLATCH_NONLATCH 	|
+				CONFIG_REG_CQUE_NONE;
+
+	void configDevice(unsigned int config)
+	{
+		writeBuf[0] = 0x01;
+		writeBuf[1] = config >> 8;
+		writeBuf[2] = config && 0xFF;
+		write(i2cFile, writeBuf, 3);
+		usleep(25);
+	}
+
+	switch (channel) {
+		case 0:
+			config |= CONFIG_REG_MUX_CHAN_0;
+			break;
+		case 1:
+			config |= CONFIG_REG_MUX_CHAN_1;
+			break;
+		case 2:
+			config |= CONFIG_REG_MUX_CHAN_2;
+			break;
+		case 3:
+			config |= CONFIG_REG_MUX_CHAN_3;
+			break;
+		default:
+			printf("canais de leitura 0-3\n");
+	}
+	configDevice(config);
+	usleep(135000);
+
+	writeBuf[0] = 0x00;
+	write(i2cFile, writeBuf, 1);
+
+	if(read(i2cFile, readBuf, 2) != 2) // read data and check error
+	{
+		printf("Error : Input/Output Error \n");
+	}
+	else
+	{
+		analogVal = readBuf[0] << 8 | readBuf[1];
+		voltage = (float)analogVal*4.096/32767.0;
+	}
+
+	return voltage;
+}
+
+>>>>>>> 437f7133c45e9bc04aed503e87010476afc95a38
 void lcd(char data[16]){ // Função para impressão de dados no LCD
     /* 
     Pinagem utilizada nas placas no LEDs
@@ -208,6 +286,7 @@ void lcd(char data[16]){ // Função para impressão de dados no LCD
     lcd = lcdInit (2, 16, 4, LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7, 0, 0, 0, 0);
 
     lcdPuts(lcd, data); // Escrevendo no display
+<<<<<<< HEAD
 }
 
 // ############################################################################################################################
@@ -231,6 +310,31 @@ void ldr(){ // Função para leitura de luminosidade do sensor LDR
 char pressao[16];
 float temp2;
 
+=======
+}
+
+// ############################################################################################################################
+
+char luminosidade[16];
+float temp;
+
+void ldr(){ // Função para leitura de luminosidade do sensor LDR
+    if(openI2CBus("/dev/i2c-1") == -1){
+		printf("LDR não está sendo lido!\n");
+	}
+	setI2CSlave(0x48);
+	printf("Luminosidade: %.2f\n", readVoltage(0));
+    temp = readVoltage(0);
+    char array[10];
+    sprintf(array, "%.2f", temp);
+    strcat(strcpy(luminosidade, "Lum: "), array);
+    lcd(luminosidade);
+}
+
+char pressao[16];
+float temp2;
+
+>>>>>>> 437f7133c45e9bc04aed503e87010476afc95a38
 void bmp(){ // Função para leitura de pressão atmosférica do sensor BMP180 ou BMP085
     if(openI2CBus("/dev/i2c-1") == -1){
 		printf("BPM não está sendo lido!\n");
