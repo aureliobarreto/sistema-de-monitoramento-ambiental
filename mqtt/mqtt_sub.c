@@ -30,7 +30,7 @@ int main() {
 	mosquitto_connect_callback_set(mosq, on_connect);
 	mosquitto_message_callback_set(mosq, on_message);
 	
-	rc = mosquitto_connect(mosq, "localhost", 1884, 10);
+	rc = mosquitto_connect(mosq, "10.0.0.101", 1883, 60);
 	if(rc) {
 		printf("Cliente não conectado ao broker! Error: %d\n", rc);
 		return -1;

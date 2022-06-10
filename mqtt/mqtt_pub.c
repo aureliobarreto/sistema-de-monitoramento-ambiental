@@ -6,7 +6,7 @@ int main(){
     struct mosquitto * mosq;
     mosquitto_lib_init();
     mosq = mosquitto_new("publisher-test", true, NULL);
-    rc = mosquitto_connect(mosq, "localhost", 1884, 60);
+    rc = mosquitto_connect(mosq, "10.0.0.101", 1883, 60);
     if (rc != 0)
     {
         printf("Cliente não conectado ao broker! Error: %d\n", rc);
