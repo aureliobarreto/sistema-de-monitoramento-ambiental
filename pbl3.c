@@ -38,7 +38,7 @@ float temp2;
 int lcd;
 int dht11_dat[5] = {0, 0, 0, 0, 0};
 
-void ldr_bpm(){ // Função para leitura de luminosidade do sensor LDR
+void sensor(){ // Função para leitura dos sensores
 	time_t t = time(NULL);
   	struct tm tm = *localtime(&t);
 	lcd = lcdInit (2, 16, 4, LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7, 0, 0, 0, 0);
@@ -125,7 +125,7 @@ int main(){ // Função principal do sistema
 	int i;
 	for (i = 2; i <= 3; i++)
 	{
-		ldr_bpm();  
+		sensor();  
         system("clear");
 		i--;
 	}
