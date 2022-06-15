@@ -6,6 +6,7 @@ int main(){
     struct mosquitto * mosq;
     mosquitto_lib_init();
     mosq = mosquitto_new("publisher-test", true, NULL);
+    mosquitto_user_pw_set(mosq, "aluno", "aluno*123");
     rc = mosquitto_connect(mosq, "10.0.0.101", 1883, 60);
     if (rc != 0)
     {

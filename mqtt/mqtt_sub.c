@@ -27,6 +27,7 @@ int main() {
 	struct mosquitto *mosq;
 
 	mosq = mosquitto_new("subscribe-test", true, &id);
+	mosquitto_username_pw_set(mosq, "aluno", "aluno*123");
 	mosquitto_connect_callback_set(mosq, on_connect);
 	mosquitto_message_callback_set(mosq, on_message);
 	
