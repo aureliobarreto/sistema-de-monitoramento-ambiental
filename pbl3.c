@@ -53,6 +53,14 @@ float temp2;
 int lcd;
 int dht11_dat[5] = {0, 0, 0, 0, 0};
 
+void tempo(int contador){
+    if (contador == NULL || contador == 0){
+        contador = 2000;
+    }else{
+        delay(contador);
+    }
+}
+
 
 
 void dht11(){
@@ -124,7 +132,7 @@ void dht11(){
                 printf("Temperatura: %d.0 C | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[2], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
             }
         }
-	    delay(2000);
+	    tempo();
         break;
     }
     
@@ -174,7 +182,7 @@ void sensor(){ // Função para leitura dos sensores
             lcdPosition(lcd, 0, 1);
             lcdPuts(lcd, pressao); // Escrevendo no display
         }
-        delay(2000);
+        tempo();
     }
     
 }
