@@ -53,6 +53,8 @@ float temp2;
 int lcd;
 int dht11_dat[5] = {0, 0, 0, 0, 0};
 
+int tempo_cliente = 0;
+
 void tempo(int contador){
     if (contador == NULL || contador == 0){
         contador = 2000;
@@ -60,8 +62,6 @@ void tempo(int contador){
         delay(contador);
     }
 }
-
-
 
 void dht11(){
     lcd = lcdInit (2, 16, 4, LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7, 0, 0, 0, 0);
@@ -85,57 +85,50 @@ void dht11(){
         
     pinMode(DHTPIN, INPUT);
 
-    for(;;){
-
-        for (i = 0; i < MAXTIMINGS; i++){
-            counter = 0;
-            while (digitalRead(DHTPIN) == laststate){
-                counter++;
-                delayMicroseconds(1);
-                if (counter == 255){
-                    break;
-                }
-            }
-            laststate = digitalRead(DHTPIN);
-
-            if (counter == 255)
+   for (i = 0; i < MAXTIMINGS; i++){
+        counter = 0;
+        while (digitalRead(DHTPIN) == laststate){
+            counter++;
+            delayMicroseconds(1);
+            if (counter == 255){
                 break;
-
-            if ((i >= 4) && (i % 2 == 0)){
-                dht11_dat[j / 8] <<= 1;
-                if (counter > 16)
-                    dht11_dat[j / 8] |= 1;
-                j++;
             }
         }
+        laststate = digitalRead(DHTPIN);
 
-    
-    
-        if ((j >= 40) && (dht11_dat[4] == ((dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF))){
+        if (counter == 255)
+            break;
+
+        if ((i >= 4) && (i % 2 == 0)){
+            dht11_dat[j / 8] <<= 1;
+            if (counter > 16)
+                dht11_dat[j / 8] |= 1;
+            j++;
+        }
+    }
+
+    if ((j >= 40) && (dht11_dat[4] == ((dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3]) & 0xFF))){
         f = dht11_dat[2] * 9. / 5. + 32;
 
-            if (digitalRead(chave1) == LOW && digitalRead(chave2) == HIGH){
-                lcdPosition(lcd, 0, 0);
-                lcdPrintf(lcd, "Umi: %d.%d\n", dht11_dat[0], dht11_dat[1]);
-                printf("Umidade: %d.%d %% | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[0], dht11_dat[1], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
-            }else if (digitalRead(chave2) == LOW && digitalRead(chave1) == HIGH){
-                lcdPosition(lcd, 0, 1);
-                lcdPrintf(lcd, "Temp: %d.0 C", dht11_dat[2]);
-                printf("Temperatura: %d.0 C | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[2], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
-            }else if(digitalRead(chave1) == LOW && digitalRead(chave2) == LOW){
-                lcdPosition(lcd, 0, 0);
-                lcdPrintf(lcd, "Umi: %d.%d\n", dht11_dat[0], dht11_dat[1]);
-                printf("Umidade: %d.%d %% | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[0], dht11_dat[1], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        if (digitalRead(chave1) == LOW && digitalRead(chave2) == HIGH){
+            lcdPosition(lcd, 0, 0);
+            lcdPrintf(lcd, "Umi: %d.%d\n", dht11_dat[0], dht11_dat[1]);
+            printf("Umidade: %d.%d %% | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[0], dht11_dat[1], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        }else if (digitalRead(chave2) == LOW && digitalRead(chave1) == HIGH){
+            lcdPosition(lcd, 0, 1);
+            lcdPrintf(lcd, "Temp: %d.0 C", dht11_dat[2]);
+            printf("Temperatura: %d.0 C | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[2], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        }else if(digitalRead(chave1) == LOW && digitalRead(chave2) == LOW){
+            lcdPosition(lcd, 0, 0);
+            lcdPrintf(lcd, "Umi: %d.%d\n", dht11_dat[0], dht11_dat[1]);
+            printf("Umidade: %d.%d %% | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[0], dht11_dat[1], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-                lcdPosition(lcd, 0, 1);
-                lcdPrintf(lcd, "Temp: %d.0 C", dht11_dat[2]);
-                printf("Temperatura: %d.0 C | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[2], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
-            }
+            lcdPosition(lcd, 0, 1);
+            lcdPrintf(lcd, "Temp: %d.0 C", dht11_dat[2]);
+            printf("Temperatura: %d.0 C | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[2], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
         }
-	    tempo();
-        break;
     }
-    
+	tempo(tempo_cliente);
 }
 
 void sensor(){ // Função para leitura dos sensores	
@@ -156,35 +149,32 @@ void sensor(){ // Função para leitura dos sensores
     temp = readVoltage(0);
     temp2 = readVoltage(1);
 
-    for(;;){
-        if (digitalRead(chave3) == LOW && digitalRead(chave4) == HIGH){
+    if (digitalRead(chave3) == LOW && digitalRead(chave4) == HIGH){
         sprintf(array1, "%.2f", temp);
         strcat(strcpy(luminosidade, "Lum: "), array1);
 	    printf("Luminosidade: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(0), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
         lcdPosition(lcd, 0, 0);
         lcdPuts(lcd, luminosidade); // Escrevendo no display
-        }else if (digitalRead(chave4) == LOW && digitalRead(chave3) == HIGH){
-            sprintf(array2, "%.2f", temp2);
-            strcat(strcpy(pressao, "Pre: "), array2);    
-            printf("Pressão: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(1), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
-            lcdPosition(lcd, 0, 1);
-            lcdPuts(lcd, pressao); // Escrevendo no display
-        }else if(digitalRead(chave3) == LOW && digitalRead(chave4) == LOW){
-            sprintf(array1, "%.2f", temp);
-            strcat(strcpy(luminosidade, "Lum: "), array1);
-            printf("Luminosidade: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(0), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
-            lcdPosition(lcd, 0, 0);
-            lcdPuts(lcd, luminosidade); // Escrevendo no display
+    }else if (digitalRead(chave4) == LOW && digitalRead(chave3) == HIGH){
+        sprintf(array2, "%.2f", temp2);
+        strcat(strcpy(pressao, "Pre: "), array2);    
+        printf("Pressão: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(1), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        lcdPosition(lcd, 0, 1);
+        lcdPuts(lcd, pressao); // Escrevendo no display
+    }else if(digitalRead(chave3) == LOW && digitalRead(chave4) == LOW){
+        sprintf(array1, "%.2f", temp);
+        strcat(strcpy(luminosidade, "Lum: "), array1);
+        printf("Luminosidade: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(0), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        lcdPosition(lcd, 0, 0);
+        lcdPuts(lcd, luminosidade); // Escrevendo no display
 
-            sprintf(array2, "%.2f", temp2);
-            strcat(strcpy(pressao, "Pre: "), array2);    
-            printf("Pressão: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(1), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
-            lcdPosition(lcd, 0, 1);
-            lcdPuts(lcd, pressao); // Escrevendo no display
-        }
-        tempo();
+        sprintf(array2, "%.2f", temp2);
+        strcat(strcpy(pressao, "Pre: "), array2);    
+        printf("Pressão: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(1), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        lcdPosition(lcd, 0, 1);
+        lcdPuts(lcd, pressao); // Escrevendo no display
     }
-    
+    tempo(tempo_cliente);
 }
 
 int main(void){ // Função principal do sistema
