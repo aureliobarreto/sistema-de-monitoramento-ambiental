@@ -175,7 +175,6 @@ void sensor(){ // Função para leitura dos sensores
             lcdPuts(lcd, pressao); // Escrevendo no display
         }
         delay(2000);
-        break;
     }
     
 }
