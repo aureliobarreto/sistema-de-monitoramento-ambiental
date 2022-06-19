@@ -6,7 +6,6 @@
 #include <fcntl.h>
 #include <wiringPi.h>
 #include <lcd.h>
-
 #include <ads1115_rpi.h>
 
 
