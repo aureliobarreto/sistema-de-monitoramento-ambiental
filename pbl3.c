@@ -58,12 +58,13 @@ int tempo_cliente = 0;
 void tempo(int contador){
     if (contador == NULL || contador == 0){
         contador = 2000;
+        delay(contador);
     }else{
         delay(contador);
     }
 }
 
-void dht11(){
+void temp_umi(){
     lcd = lcdInit (2, 16, 4, LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7, 0, 0, 0, 0);
     pinMode(chave1, INPUT);
     pinMode(chave2, INPUT);
@@ -131,7 +132,7 @@ void dht11(){
 	tempo(tempo_cliente);
 }
 
-void sensor(){ // Função para leitura dos sensores	
+void lum_press(){ // Função para leitura dos sensores	
     lcd = lcdInit (2, 16, 4, LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7, 0, 0, 0, 0);
     pinMode(chave3, INPUT);
     pinMode(chave4, INPUT);
@@ -177,30 +178,30 @@ void sensor(){ // Função para leitura dos sensores
     tempo(tempo_cliente);
 }
 
-int main(void){ // Função principal do sistema
+void main(){ // Função principal do sistema
 	wiringPiSetup();
     lcd = lcdInit (2, 16, 4, LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7, 0, 0, 0, 0);
     pinMode(chave1, INPUT);
     pinMode(chave2, INPUT);
     pinMode(chave3, INPUT);
     pinMode(chave4, INPUT);
+
     pinMode(botao1, INPUT);
 
     for (;;){
         if ((digitalRead(chave1) == LOW || digitalRead(chave2) == LOW) && (digitalRead(chave3) == HIGH || digitalRead(chave4) == HIGH)){
-            dht11();
+            temp_umi();
         }else if ((digitalRead(chave1) == HIGH || digitalRead(chave2) == HIGH) && (digitalRead(chave3) == LOW || digitalRead(chave4) == LOW)){
-            sensor();
+            lum_press();
         }else{
             lcdPosition(lcd, 4, 0);
             lcdPuts(lcd, "PBL 3");
             lcdPosition(lcd, 1, 1);
             lcdPuts(lcd, "Sist. Digitais");
         }  
-        
+
         if (digitalRead(botao1) == LOW){
-            return 0;
+            break;
         }
     }
-    return 0;
 }
