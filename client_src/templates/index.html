@@ -25,6 +25,7 @@
       var qos = 0;  
       var data = '{"topic": "' + topic + '", "qos": ' + qos + '}';
       socket.emit('subscribe', data=data);
+      console.log('se inscreveu no topico ' + topic)
       $('#subscribe').hide();
       $('#unsubscribe').show();
       $('#subscribe_topic').prop('readonly', true);
@@ -38,17 +39,51 @@
     });
 
     socket.on('mqtt_message', function(data) {
-      console.log(data['payload']);
-      var text = '(' + data['topic'] + ' qos: ' + data['qos'] + ') ' + data['payload'];
-      var $textarea = $('#subscribe_messages');
-      $textarea.val($textarea.val() + data['payload'] + '\n');
+      // console.log(data['payload']);
+      // var text = '(' + data['topic'] + ' qos: ' + data['qos'] + ') ' + data['payload'];
+      // var $textarea = $('#subscribe_messages');
+      // $textarea.val($textarea.val() + data['payload'] + '\n');
+
+      const list = JSON.parse(data['payload']);   // lista com objetos tipo medição
+      console.log(list);
+      let headersList = [];
+      list.forEach(element => {
+        for (attribute in element) {
+          if (headersList.indexOf(attribute) === -1) headersList.push(attribute);
+        }
+      });
+
+      let htmlTable = document.createElement("table");
+      htmlTable.classList.add("table");
+      htmlTable.classList.add("table-bordered");
+      htmlTable.classList.add("table-hover");
+      var trow = htmlTable.insertRow(-1);
+      for (let i = 0; i < headersList.length; i++) {
+        var thead = document.createElement("th");
+        thead.innerHTML = headersList[i];
+        trow.appendChild(thead);
+      }
+
+      // adicionar medicoes ao conteudo da tabela
+      for (let item = 0; item < list.length; item++) {    // itera sobre itens da lista
+        let trow = htmlTable.insertRow(-1);
+        for (let attr = 0; attr < headersList.length; attr++) {    // itera sobre os atributos dos objetos
+          let tcell = trow.insertCell(-1);
+          tcell.innerHTML = list[item][headersList[attr]];
+        }
+      }
+
+      var divcontainer = document.getElementById("lugar-da-tabela");
+      divcontainer.innerHTML = "";
+      divcontainer.appendChild(htmlTable);
     });
-  });
+});
 </script>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<body>
+  <div class="container-fluid">
   <div class="row">
     <div class="col-xs-12">
       <h1>Conexão MQTT - Pbl 3 View</h1>
@@ -92,6 +127,8 @@
   </div>
   <hr>
   <h3>Histórico de medições</h3>
+  <div id="lugar-da-tabela"></div>
+<!--
   <table class="table">
     <thead>
       <tr>
@@ -107,6 +144,7 @@
       </tr>
     </tbody>
   </table>
-
-</div>
+-->
+  </div>
+</body>
 {% endblock %}
