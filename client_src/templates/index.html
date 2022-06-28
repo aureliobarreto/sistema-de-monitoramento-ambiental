@@ -1,0 +1,150 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Conexão MQTT{% endblock %}
+
+{% block styles %}
+{{ super() }}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    const socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    $('#publish').click(function(event) {
+      var topic = "medicoes"; 
+      var message = $('#message').val();    // tempo em segundos
+      var qos = 0;  
+      var data = '{"topic": "' + topic + '", "message": "' + message + '", "qos": ' + qos + '}';
+      socket.emit('publish', data=data);
+    });
+
+    $('#subscribe').click(function(event) {
+      var topic = "medicoes"; 
+      var qos = 0;  
+      var data = '{"topic": "' + topic + '", "qos": ' + qos + '}';
+      socket.emit('subscribe', data=data);
+      console.log('se inscreveu no topico ' + topic)
+      $('#subscribe').hide();
+      $('#unsubscribe').show();
+      $('#subscribe_topic').prop('readonly', true);
+    });
+
+    $('#unsubscribe').click(function(event) {
+      socket.emit('unsubscribe_all');
+      $('#subscribe').show();
+      $('#unsubscribe').hide();
+      $('#subscribe_topic').prop('readonly', false);
+    });
+
+    socket.on('mqtt_message', function(data) {
+      // console.log(data['payload']);
+      // var text = '(' + data['topic'] + ' qos: ' + data['qos'] + ') ' + data['payload'];
+      // var $textarea = $('#subscribe_messages');
+      // $textarea.val($textarea.val() + data['payload'] + '\n');
+
+      const list = JSON.parse(data['payload']);   // lista com objetos tipo medição
+      console.log(list);
+      let headersList = [];
+      list.forEach(element => {
+        for (attribute in element) {
+          if (headersList.indexOf(attribute) === -1) headersList.push(attribute);
+        }
+      });
+
+      let htmlTable = document.createElement("table");
+      htmlTable.classList.add("table");
+      htmlTable.classList.add("table-bordered");
+      htmlTable.classList.add("table-hover");
+      var trow = htmlTable.insertRow(-1);
+      for (let i = 0; i < headersList.length; i++) {
+        var thead = document.createElement("th");
+        thead.innerHTML = headersList[i];
+        trow.appendChild(thead);
+      }
+
+      // adicionar medicoes ao conteudo da tabela
+      for (let item = 0; item < list.length; item++) {    // itera sobre itens da lista
+        let trow = htmlTable.insertRow(-1);
+        for (let attr = 0; attr < headersList.length; attr++) {    // itera sobre os atributos dos objetos
+          let tcell = trow.insertCell(-1);
+          tcell.innerHTML = list[item][headersList[attr]];
+        }
+      }
+
+      var divcontainer = document.getElementById("lugar-da-tabela");
+      divcontainer.innerHTML = "";
+      divcontainer.appendChild(htmlTable);
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<body>
+  <div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>Conexão MQTT - Pbl 3 View</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Solicitação de medições</h3>
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-12">
+            <div class="row">
+              <div class="form-horizontal">
+
+                <div class="form-group">
+                  <label class="control-label col-xs-4">Tempo em segundos: </label>
+                  <div class="col-xs-8">
+                    <input type="number" id="message" name="seconds" min="2" max="1000" value="2">
+
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-xs-8 col-xs-offset-4">
+                    <button id="publish" class="btn btn-primary">Enviar</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-xs-8 col-xs-offset-4">
+                    <button id="subscribe" class="btn btn-primary">Iniciar</button>
+                    <button id="unsubscribe" class="btn btn-default" style="display: none;" >Unsubscribe</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <h3>Histórico de medições</h3>
+  <div id="lugar-da-tabela"></div>
+<!--
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Umidade</th>
+        <th>Temperatura</th>
+        <th>Luminosidade</th>
+        <th>Pressão</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="subscribe-messages"></td>
+      </tr>
+    </tbody>
+  </table>
+-->
+  </div>
+</body>
+{% endblock %}
