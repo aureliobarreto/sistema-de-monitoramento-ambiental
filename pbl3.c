@@ -20,7 +20,7 @@
 #include <pthread.h>
 #include <mosquitto.h>
 #include <locale.h>
-#include <curses.h>
+//#include <curses.h>
 
 // Pinagem LCD
 #define LCD_RS 6
@@ -190,7 +190,7 @@ void concatenar_luminosidade(float luminosidade){
 	char lum_valor[MAX];
 	char lum_final[MAX];
 
-	gcvt(luminosidade, 4, lum_valor);
+    sprintf (lum_valor, "%.2f", luminosidade);
 
 	strcat(strcpy(lum_final, text_luminosidade), lum_valor);
 
@@ -212,14 +212,14 @@ void concatenar_pressao(float pressao){
 	char press_valor[MAX];
 	char press_final[MAX];
 
-	gcvt(pressao, 4, press_valor);
+    sprintf (press_valor, "%.2f", pressao);
 
 	strcat(strcpy(press_final, text_pressao), press_valor);
 
 	gravar_historico(text_pressao, press_valor, hora);
 }
 
-int ler_historico(){
+void ler_historico(){
 	// Abre um arquivo TEXTO para LEITURA
 	FILE *arq;
 	char Linha[100];
@@ -283,6 +283,17 @@ void sensor()
     char buffer_hora[CONCAT];
     char buffer_umi[CONCAT];
     char str[5];
+
+    char* text_umidade = "Umidade: ";
+    char umi[MAX];
+    char umi_1[MAX];
+    char umi_2[MAX];
+    char umi_valor[MAX];
+    char umi_final[MAX];
+
+    char* text_temperatura = "Temperatura: ";
+    char temp_valor[MAX];
+    char temp_final[MAX];
 
     if (openI2CBus("/dev/i2c-1") == -1)
     {
@@ -348,13 +359,6 @@ void sensor()
             lcdPrintf(lcd, "Umi: %d.%d %%", dht11_dat[0], dht11_dat[1]);
             printf("Umidade: %d.%d %% | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[0], dht11_dat[1], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-            char* text_umidade = "Umidade: ";
-            char umi[MAX];
-            char umi_1[MAX];
-            char umi_2[MAX];
-            char umi_valor[MAX];
-            char umi_final[MAX];
-
             sprintf(umi_1,"%d", dht11_dat[0]); //int to string
             sprintf(umi_2,"%d", dht11_dat[1]);
 
@@ -370,11 +374,7 @@ void sensor()
             lcdPrintf(lcd, "Temp: %d.0 C", dht11_dat[2]);
             printf("Temperatura: %d.0 C | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[2], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-            char* text_temperatura = "Temperatura: ";
-            char temp_valor[MAX];
-            char temp_final[MAX];
-
-            sprintf(temp_valor,"%d", temperatura); //int to string
+            sprintf(temp_valor,"%d", dht11_dat[2]); //int to string
 
             strcat(strcpy(temp_final, text_temperatura), temp_valor);
 
@@ -399,11 +399,7 @@ void sensor()
             lcdPrintf(lcd, "Temp: %d.0 C", dht11_dat[2]);
             printf("Temperatura: %d.0 C | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[2], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-            char* text_temperatura = "Temperatura: ";
-            char temp_valor[MAX];
-            char temp_final[MAX];
-
-            sprintf(temp_valor,"%d", temperatura); //int to string
+            sprintf(temp_valor,"%d", dht11_dat[2]); //int to string
 
             strcat(strcpy(temp_final, text_temperatura), temp_valor);
 
@@ -417,15 +413,7 @@ void sensor()
             lcdPosition(lcd, 0, 0);
             lcdPuts(lcd, luminosidade); // Escrevendo no display
 
-            char* text_luminosidade = "Luminosidade: ";
-            char lum_valor[MAX];
-            char lum_final[MAX];
-
-            gcvt(luminosidade, 4, lum_valor);
-
-            strcat(strcpy(lum_final, text_luminosidade), lum_valor);
-
-            pub(lum_final); //ENVIANDO PARA O CLIENTE
+            pub(luminosidade); //ENVIANDO PARA O CLIENTE
         }
         else if (digitalRead(chave1) == HIGH && digitalRead(chave2) == HIGH && digitalRead(chave3) == HIGH && digitalRead(chave4) == LOW)
         {
@@ -435,15 +423,7 @@ void sensor()
             lcdPosition(lcd, 0, 1);
             lcdPuts(lcd, pressao); // Escrevendo no display
 
-            char* text_pressao = "Pressao: ";
-            char press_valor[MAX];
-            char press_final[MAX];
-
-            gcvt(pressao, 4, press_valor);
-
-            strcat(strcpy(press_final, text_pressao), press_valor);
-
-            pub(press_final); //ENVIANDO PARA O CLIENTE
+            pub(pressao); //ENVIANDO PARA O CLIENTE
         }
         else if (digitalRead(chave1) == HIGH && digitalRead(chave2) == HIGH && digitalRead(chave3) == LOW && digitalRead(chave4) == LOW)
         {
@@ -453,15 +433,7 @@ void sensor()
             lcdPosition(lcd, 0, 0);
             lcdPuts(lcd, luminosidade); // Escrevendo no display
 
-            char* text_luminosidade = "Luminosidade: ";
-            char lum_valor[MAX];
-            char lum_final[MAX];
-
-            gcvt(luminosidade, 4, lum_valor);
-
-            strcat(strcpy(lum_final, text_luminosidade), lum_valor);
-
-            pub(lum_final); //ENVIANDO PARA O CLIENTE
+            pub(luminosidade); //ENVIANDO PARA O CLIENTE
 
             sprintf(array2, "%.2f", temp2);
             strcat(strcpy(pressao, "Pre: "), array2);
@@ -469,15 +441,7 @@ void sensor()
             lcdPosition(lcd, 0, 1);
             lcdPuts(lcd, pressao); // Escrevendo no display
 
-            char* text_pressao = "Pressao: ";
-            char press_valor[MAX];
-            char press_final[MAX];
-
-            gcvt(pressao, 4, press_valor);
-
-            strcat(strcpy(press_final, text_pressao), press_valor);
-
-            pub(press_final); //ENVIANDO PARA O CLIENTE
+            pub(pressao); //ENVIANDO PARA O CLIENTE
         }
         tempo(tempo_cliente);
         lcdClear(lcd);
