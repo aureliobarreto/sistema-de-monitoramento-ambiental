@@ -54,7 +54,6 @@
 #define DADOS 20
 
 char historico[DADOS][MAX] = {""};
-char hora_historico[DADOS][MAX] = {""};
 
 int count = 0;
 
@@ -82,9 +81,70 @@ void tempo(int contador)
     }
 }
 
-void pub(char* envio){
+// Funcionamento do SUB
+
+void on_connect(struct mosquitto *mosq, void *obj, int rc)
+{
+    printf("Cliente: %d\n", *(int *)obj);
+    if (rc)
+    {
+        printf("Erro: %d\n", rc);
+        exit(-1);
+    }
+    mosquitto_subscribe(mosq, NULL, "TP02-G01/tempo", 0);
+}
+
+void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg)
+{
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char *recebido = msg->payload;
+    int convertido = atoi(recebido);
+    tempo_cliente = convertido * 1000;
+    if (tempo_cliente != 0 && tempo_cliente > 2)
+    {
+        tempo(tempo_cliente);
+        printf("Tempo alterado em %s para %d segundos - %d-%02d-%02d %02d:%02d:%02d\n", msg->topic, convertido, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    }
+}
+
+void *sub(void *args)
+{
+    int rc, id = 12;
+
+    mosquitto_lib_init();
+
+    struct mosquitto *mosq;
+
+    mosq = mosquitto_new("TP02-G01/tempo", true, &id);
+    mosquitto_username_pw_set(mosq, "aluno", "aluno*123");
+    mosquitto_connect_callback_set(mosq, on_connect);
+    mosquitto_message_callback_set(mosq, on_message);
+
+    rc = mosquitto_connect(mosq, "10.0.0.101", 1883, 60);
+    if (rc)
+    {
+        printf("Cliente não conectado ao broker! Error: %d\n", rc);
+    }
+
+    mosquitto_loop_start(mosq);
+    printf("Pressione Enter para sair...\n");
+    getchar();
+    mosquitto_loop_stop(mosq, true);
+
+    mosquitto_disconnect(mosq);
+    mosquitto_destroy(mosq);
+    mosquitto_lib_cleanup();
+
+    return NULL;
+}
+
+//////////////////////////////////////////////////
+
+void pub(char *envio)
+{
     int rc;
-    struct mosquitto * mosq;
+    struct mosquitto *mosq;
     mosquitto_lib_init();
     mosq = mosquitto_new("publisher-test", true, NULL);
     mosquitto_username_pw_set(mosq, "aluno", "aluno*123");
@@ -94,175 +154,132 @@ void pub(char* envio){
         printf("Cliente não conectado ao broker! Error: %d\n", rc);
         mosquitto_destroy(mosq);
     }
-    mosquitto_publish(mosq, NULL, "TP02-G01", MAX, envio, 0, false);
-    printf("## Envio realizado com sucesso ao broker ##\n");
+    mosquitto_publish(mosq, NULL, "TP02-G01", strlen(envio), envio, 0, false);
+    // printf("## Envio realizado com sucesso ao broker ##\n");
     mosquitto_disconnect(mosq);
     mosquitto_destroy(mosq);
-    mosquitto_lib_cleanup();  
+    mosquitto_lib_cleanup();
 }
 
-void gravar_historico(char* v1, char* v2, char* hora){
-	FILE *arq;
-	int result;
+void gravar_historico(char *v1, char *v2)
+{
+    FILE *arq;
+    int result;
 
-	arq = fopen("historico.txt", "at");  // Cria um arquivo texto para grava��o
-	if (arq == NULL) // Se n�o conseguiu criar
-	{
-		printf("Problemas na CRIACAO do arquivo\n");
-		return;
-	}
+    arq = fopen("historico.txt", "at"); // Cria um arquivo texto para grava��o
+    if (arq == NULL)                    // Se n�o conseguiu criar
+    {
+        printf("Problemas na CRIACAO do arquivo\n");
+        return;
+    }
 
-	result = fprintf(arq, v1);
-	result = fprintf(arq, " ");
-	result = fprintf(arq, v2);
-	result = fprintf(arq, "\nHora: ");
-    result = fprintf(arq, hora);
+    result = fprintf(arq, v1);
+    result = fprintf(arq, " ");
+    result = fprintf(arq, v2);
     result = fprintf(arq, "\n");
 
-	if (result == EOF)
-		printf("Erro na Gravacao\n");
+    if (result == EOF)
+        printf("Erro na Gravacao\n");
 
-	fclose(arq);
+    fclose(arq);
 }
 
-void concatenar_umidade(int umidade_v1, int umidade_v2){
-    time_t current_time;
-    struct tm * time_info;
-    char hora[8];
+void concatenar_umidade(int umidade_v1, int umidade_v2)
+{
+    // Vari�veis para umidade
+    char *text_umidade = "Umi: ";
+    char umi[MAX];
+    char umi_1[MAX];
+    char umi_2[MAX];
+    char umi_valor[MAX];
+    char umi_final[MAX];
 
-    time(&current_time);
-    time_info = localtime(&current_time);
+    sprintf(umi_1, "%d", umidade_v1); // int to string
+    sprintf(umi_2, "%d", umidade_v2);
 
-    strftime(hora, 8, "%H:%M", time_info);
+    strcat(strcpy(umi, umi_1), ".");
+    strcat(strcpy(umi_valor, umi), umi_2);
+    strcat(strcpy(umi_final, text_umidade), umi_valor);
 
-	//Vari�veis para umidade
-	char* text_umidade = "Umidade: ";
-	char umi[MAX];
-	char umi_1[MAX];
-	char umi_2[MAX];
-	char umi_valor[MAX];
-	char umi_final[MAX];
-
-	sprintf(umi_1,"%d", umidade_v1); //int to string
-	sprintf(umi_2,"%d", umidade_v2);
-
-	strcat(strcpy(umi, umi_1), ".");
-	strcat(strcpy(umi_valor, umi), umi_2);
-	strcat(strcpy(umi_final, text_umidade), umi_valor);
-
-	gravar_historico(text_umidade, umi_valor, hora);
+    gravar_historico(text_umidade, umi_valor);
 }
 
-void concatenar_temperatura(int temperatura){
-    time_t current_time;
-    struct tm * time_info;
-    char hora[8];
+void concatenar_temperatura(int temperatura)
+{
 
-    time(&current_time);
-    time_info = localtime(&current_time);
+    // Variaveis para temperatura
+    char *text_temp = "Temp: ";
+    char temp_valor[MAX];
+    char temp_final[MAX];
 
-    strftime(hora, 8, "%H:%M", time_info);
+    sprintf(temp_valor, "%d", temperatura); // int to string
 
-	//Variaveis para temperatura
-	char* text_temperatura = "Temperatura: ";
-	char temp_valor[MAX];
-	char temp_final[MAX];
+    strcat(strcpy(temp_final, text_temp), temp_valor);
 
-	sprintf(temp_valor,"%d", temperatura); //int to string
-
-	strcat(strcpy(temp_final, text_temperatura), temp_valor);
-
-	gravar_historico(text_temperatura, temp_final, hora);
+    gravar_historico(text_temp, temp_final);
 }
 
-void concatenar_luminosidade(float luminosidade){
-    time_t current_time;
-    struct tm * time_info;
-    char hora[8];
+void concatenar_luminosidade(float luminosidade)
+{
 
-    time(&current_time);
-    time_info = localtime(&current_time);
+    // Vari�veis para luminosidade
+    char *text_luminosidade = "Lumi: ";
+    char lum_valor[MAX];
+    char lum_final[MAX];
 
-    strftime(hora, 8, "%H:%M", time_info);
+    sprintf(lum_valor, "%.2f", luminosidade);
 
-	//Vari�veis para luminosidade
-	char* text_luminosidade = "Luminosidade: ";
-	char lum_valor[MAX];
-	char lum_final[MAX];
+    strcat(strcpy(lum_final, text_luminosidade), lum_valor);
 
-    sprintf (lum_valor, "%.2f", luminosidade);
-
-	strcat(strcpy(lum_final, text_luminosidade), lum_valor);
-
-	gravar_historico(text_luminosidade, lum_valor, hora);
+    gravar_historico(text_luminosidade, lum_valor);
 }
 
-void concatenar_pressao(float pressao){
-    time_t current_time;
-    struct tm * time_info;
-    char hora[8];
+void concatenar_pressao(float pressao)
+{
 
-    time(&current_time);
-    time_info = localtime(&current_time);
+    // Vari�veis para press�o
+    char *text_pressao = "Press: ";
+    char press_valor[MAX];
+    char press_final[MAX];
 
-    strftime(hora, 8, "%H:%M", time_info);
+    sprintf(press_valor, "%.2f", pressao);
 
-	//Vari�veis para press�o
-	char* text_pressao = "Pressao: ";
-	char press_valor[MAX];
-	char press_final[MAX];
+    strcat(strcpy(press_final, text_pressao), press_valor);
 
-    sprintf (press_valor, "%.2f", pressao);
-
-	strcat(strcpy(press_final, text_pressao), press_valor);
-
-	gravar_historico(text_pressao, press_valor, hora);
+    gravar_historico(text_pressao, press_valor);
 }
 
-void ler_historico(){
-	// Abre um arquivo TEXTO para LEITURA
-	FILE *arq;
-	char Linha[100];
-	char *result;
-	int i;
-    char* mensagem =  "#### Histórico de medições ####\n";
-    printf(mensagem);
-    pub(mensagem);
+void ler_historico()
+{
+    FILE *textfile;
+    char *text;
+    char *result;
+    long numbytes;
 
-	arq = fopen("historico.txt", "rt");
-	if (arq == NULL)  // Se houve erro na abertura
-	{
-   	   printf("Problemas na abertura do arquivo\n");
-   	   return;
-	}
-	i = 1;
-	while (!feof(arq))
-	{
-	// L� uma linha (inclusive com o '\n')
-    	result = fgets(Linha, 100, arq);  // o 'fgets' l� at� 99 caracteres ou at� o '\n'
-		if (result){  // Se foi poss�vel ler
-            strcpy(historico[i], Linha);
-            pub(historico[i]); //Enviando o Histórico
-            lcdPosition(lcd, 0, 0);
-            lcdPuts(lcd, historico[i]); // Escrevendo no display
-            lcdPosition(lcd, 1, 1);
-            lcdPuts(lcd, historico[i+1]); // Escrevendo no display
-            delay(1000);
+    if (digitalRead(botao1) == LOW)
+    {
+        delay(500);
 
-            if(i == 19){
-                fclose(arq);
-                arq = fopen("historico.txt", "w");
-                fclose(arq);
-                break;
-            }
-		}
-		i++;
-	}
+        textfile = fopen("historico.txt", "rt");
+        if (textfile == NULL)
+            printf("Erro ao abrir histórico");
 
+        fseek(textfile, 0L, SEEK_END);
+        numbytes = ftell(textfile);
+        fseek(textfile, 0L, SEEK_SET);
 
-	fclose(arq);
+        text = (char *)calloc(numbytes, sizeof(char));
+        if (text == NULL)
+            printf("Histórico vazio");
+
+        fread(text, sizeof(char), numbytes, textfile);
+
+        pub(text);
+        fclose(textfile);
+    }
+    textfile = fopen("historico.txt", "w");
+    fclose(textfile);
 }
-
 
 void sensor()
 {
@@ -284,14 +301,14 @@ void sensor()
     char buffer_umi[CONCAT];
     char str[5];
 
-    char* text_umidade = "Umidade: ";
+    char *text_umidade = "Umidade: ";
     char umi[MAX];
     char umi_1[MAX];
     char umi_2[MAX];
     char umi_valor[MAX];
     char umi_final[MAX];
 
-    char* text_temperatura = "Temperatura: ";
+    char *text_temperatura = "Temperatura: ";
     char temp_valor[MAX];
     char temp_final[MAX];
 
@@ -346,6 +363,30 @@ void sensor()
     {
         f = dht11_dat[2] * 9. / 5. + 32;
 
+        FILE *arq;
+        int result;
+
+        time_t current_time;
+        struct tm *time_info;
+        char hora[8];
+
+        time(&current_time);
+        time_info = localtime(&current_time);
+
+        strftime(hora, 8, "%H:%M", time_info);
+
+        arq = fopen("historico.txt", "at"); // Cria um arquivo texto para grava��o
+        if (arq == NULL)                    // Se n�o conseguiu criar
+        {
+            printf("Problemas na CRIACAO do arquivo\n");
+            return;
+        }
+
+        result = fprintf(arq, "\n");
+        result = fprintf(arq, hora);
+        result = fprintf(arq, "\n\n");
+        fclose(arq);
+
         concatenar_umidade(dht11_dat[0], dht11_dat[1]);
         concatenar_temperatura(dht11_dat[2]);
         concatenar_luminosidade(temp);
@@ -359,14 +400,13 @@ void sensor()
             lcdPrintf(lcd, "Umi: %d.%d %%", dht11_dat[0], dht11_dat[1]);
             printf("Umidade: %d.%d %% | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[0], dht11_dat[1], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-            sprintf(umi_1,"%d", dht11_dat[0]); //int to string
-            sprintf(umi_2,"%d", dht11_dat[1]);
+            sprintf(umi_1, "%d", dht11_dat[0]); // int to string
+            sprintf(umi_2, "%d", dht11_dat[1]);
 
             strcat(strcpy(umi, umi_1), ".");
             strcat(strcpy(umi_valor, umi), umi_2);
             strcat(strcpy(umi_final, text_umidade), umi_valor);
-
-            pub(umi_final); //ENVIANDO PARA O CLIENTE
+            pub(umi_final); // ENVIANDO PARA O CLIENTE
         }
         else if (digitalRead(chave1) == HIGH && digitalRead(chave2) == LOW && digitalRead(chave3) == HIGH && digitalRead(chave4) == HIGH)
         {
@@ -374,56 +414,52 @@ void sensor()
             lcdPrintf(lcd, "Temp: %d.0 C", dht11_dat[2]);
             printf("Temperatura: %d.0 C | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[2], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-            sprintf(temp_valor,"%d", dht11_dat[2]); //int to string
+            sprintf(temp_valor, "%d", dht11_dat[2]); // int to string
 
             strcat(strcpy(temp_final, text_temperatura), temp_valor);
-
-            pub(temp_final); //ENVIANDO PARA O CLIENTE
+            pub(temp_final); // ENVIANDO PARA O CLIENTE
         }
         else if (digitalRead(chave1) == LOW && digitalRead(chave2) == LOW && digitalRead(chave3) == HIGH && digitalRead(chave4) == HIGH)
         {
             lcdPosition(lcd, 0, 0);
-            lcdPrintf(lcd, "Umi: %d.%d\n", dht11_dat[0], dht11_dat[1]);
+            lcdPrintf(lcd, "Umi: %d.%d %%", dht11_dat[0], dht11_dat[1]);
             printf("Umidade: %d.%d %% | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[0], dht11_dat[1], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-            sprintf(umi_1,"%d", dht11_dat[0]); //int to string
-            sprintf(umi_2,"%d", dht11_dat[1]);
+            sprintf(umi_1, "%d", dht11_dat[0]); // int to string
+            sprintf(umi_2, "%d", dht11_dat[1]);
 
             strcat(strcpy(umi, umi_1), ".");
             strcat(strcpy(umi_valor, umi), umi_2);
             strcat(strcpy(umi_final, text_umidade), umi_valor);
-
-            pub(umi_final); //ENVIANDO PARA O CLIENTE
+            pub(umi_final); // ENVIANDO PARA O CLIENTE
 
             lcdPosition(lcd, 0, 1);
             lcdPrintf(lcd, "Temp: %d.0 C", dht11_dat[2]);
             printf("Temperatura: %d.0 C | %d-%02d-%02d %02d:%02d:%02d\n", dht11_dat[2], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-            sprintf(temp_valor,"%d", dht11_dat[2]); //int to string
+            sprintf(temp_valor, "%d", dht11_dat[2]); // int to string
 
             strcat(strcpy(temp_final, text_temperatura), temp_valor);
-
-            pub(temp_final); //ENVIANDO PARA O CLIENTE
+            pub(temp_final); // ENVIANDO PARA O CLIENTE
         }
         else if (digitalRead(chave1) == HIGH && digitalRead(chave2) == HIGH && digitalRead(chave3) == LOW && digitalRead(chave4) == HIGH)
         {
             sprintf(array1, "%.2f", temp);
-            strcat(strcpy(luminosidade, "Lum: "), array1);
+            strcat(strcpy(luminosidade, "Lumi: "), array1);
             printf("Luminosidade: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(0), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
             lcdPosition(lcd, 0, 0);
             lcdPuts(lcd, luminosidade); // Escrevendo no display
-
-            pub(luminosidade); //ENVIANDO PARA O CLIENTE
+            pub(luminosidade);          // ENVIANDO PARA O CLIENTE
         }
         else if (digitalRead(chave1) == HIGH && digitalRead(chave2) == HIGH && digitalRead(chave3) == HIGH && digitalRead(chave4) == LOW)
         {
             sprintf(array2, "%.2f", temp2);
-            strcat(strcpy(pressao, "Pre: "), array2);
+            strcat(strcpy(pressao, "Press: "), array2);
             printf("Pressão: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(1), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
             lcdPosition(lcd, 0, 1);
             lcdPuts(lcd, pressao); // Escrevendo no display
 
-            pub(pressao); //ENVIANDO PARA O CLIENTE
+            pub(pressao); // ENVIANDO PARA O CLIENTE
         }
         else if (digitalRead(chave1) == HIGH && digitalRead(chave2) == HIGH && digitalRead(chave3) == LOW && digitalRead(chave4) == LOW)
         {
@@ -432,32 +468,39 @@ void sensor()
             printf("Luminosidade: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(0), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
             lcdPosition(lcd, 0, 0);
             lcdPuts(lcd, luminosidade); // Escrevendo no display
-
-            pub(luminosidade); //ENVIANDO PARA O CLIENTE
+            pub(luminosidade);          // ENVIANDO PARA O CLIENTE
 
             sprintf(array2, "%.2f", temp2);
             strcat(strcpy(pressao, "Pre: "), array2);
             printf("Pressão: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(1), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
             lcdPosition(lcd, 0, 1);
             lcdPuts(lcd, pressao); // Escrevendo no display
-
-            pub(pressao); //ENVIANDO PARA O CLIENTE
+            pub(pressao);          // ENVIANDO PARA O CLIENTE
+        }
+        else
+        {
+            lcdClear(lcd);
+            lcdPosition(lcd, 4, 0);
+            lcdPuts(lcd, "PBL 3");
+            lcdPosition(lcd, 1, 1);
+            lcdPuts(lcd, "Sist. Digitais");
         }
         tempo(tempo_cliente);
         lcdClear(lcd);
     }
     zerar_historico++;
-    if (zerar_historico == 19){
+    if (zerar_historico == 19)
+    {
         FILE *arq;
         arq = fopen("historico.txt", "w");
         fclose(arq);
     }
-    
 }
 
 void addTempo()
 {
-    if (digitalRead(botao2) == LOW){
+    if (digitalRead(botao2) == LOW)
+    {
         delay(500);
         tempo_cliente = tempo_cliente + 1000;
         int temp = tempo_cliente / 1000;
@@ -467,19 +510,22 @@ void addTempo()
 
 void remTempo()
 {
-    if (digitalRead(botao3) == LOW){
+    if (digitalRead(botao3) == LOW)
+    {
         delay(500);
-        if (tempo_cliente < 2000){
+        if (tempo_cliente < 2000)
+        {
             printf("#### Tempo de medição não pode ser menor que dois segundos ####\n");
             tempo_cliente = 2000;
             printf("#### Tempo de medição atualizado para: %d segundos\n", temp);
-        }else{
+        }
+        else
+        {
             tempo_cliente = tempo_cliente - 1000;
             int temp = tempo_cliente / 1000;
             printf("#### Tempo de medição atualizado para: %d segundos\n", temp);
         }
     }
-    
 }
 
 void *interrupcao()
@@ -508,7 +554,9 @@ void main(void)
 
     pthread_t interrupt;
     pthread_create(&interrupt, NULL, interrupcao, NULL);
-    pthread_join(interrupt, NULL);
+
+    pthread_t sub_t;
+    pthread_create(&sub_t, NULL, sub, NULL);
 
     while (1)
     {

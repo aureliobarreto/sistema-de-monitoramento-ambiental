@@ -4,19 +4,22 @@
 
 #include <mosquitto.h>
 
+
 void on_connect(struct mosquitto *mosq, void *obj, int rc) {
 	printf("ID: %d\n", * (int *) obj);
 	if(rc) {
 		printf("Erro: %d\n", rc);
 		exit(-1);
 	}
-	mosquitto_subscribe(mosq, NULL, "test/t1", 0);
+	mosquitto_subscribe(mosq, NULL, "TP02-G01", 0);
 }
 
 void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg) {
 	time_t t = time(NULL);
   	struct tm tm = *localtime(&t);
-	printf("Mensagem recebida em %s: %s - %d-%02d-%02d %02d:%02d:%02d\n", msg->topic, (char *) msg->payload,  tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+	char *recebido = msg->payload;
+    int convertido = atoi(recebido);
+	printf("Mensagem recebida em %s: %d - %d-%02d-%02d %02d:%02d:%02d\n", msg->topic, convertido,  tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 }
 
 int main() {
@@ -26,7 +29,7 @@ int main() {
 
 	struct mosquitto *mosq;
 
-	mosq = mosquitto_new("subscribe-test", true, &id);
+	mosq = mosquitto_new("TP02-G01", true, &id);
 	mosquitto_username_pw_set(mosq, "aluno", "aluno*123");
 	mosquitto_connect_callback_set(mosq, on_connect);
 	mosquitto_message_callback_set(mosq, on_message);
