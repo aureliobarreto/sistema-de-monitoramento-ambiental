@@ -249,6 +249,33 @@ void concatenar_pressao(float pressao)
     gravar_historico(text_pressao, press_valor);
 }
 
+void imprimir_lcd()
+{
+    FILE *fp;
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    int cont = 0;
+
+    fp = fopen("historico.txt", "r");
+    if (fp == NULL)
+        exit(EXIT_FAILURE);
+
+    while ((read = getline(&line, &len, fp)) != -1 && cont != 15)
+    {
+        lcdClear(lcd);
+        lcdPosition(lcd, 1, 0);
+        lcdPuts(lcd, "# Historico #");
+        lcdPosition(lcd, 1, 1);
+        lcdPuts(lcd, line);
+        delay(1000);
+        cont++;
+    }
+
+    fclose(fp);
+}
+
 void ler_historico()
 {
     FILE *textfile;
@@ -277,6 +304,7 @@ void ler_historico()
         pub(text);
         fclose(textfile);
     }
+    imprimir_lcd();
     textfile = fopen("historico.txt", "w");
     fclose(textfile);
 }
@@ -484,7 +512,9 @@ void sensor()
             lcdPuts(lcd, "PBL 3");
             lcdPosition(lcd, 1, 1);
             lcdPuts(lcd, "Sist. Digitais");
+            delay(2000);
         }
+
         tempo(tempo_cliente);
         lcdClear(lcd);
     }
