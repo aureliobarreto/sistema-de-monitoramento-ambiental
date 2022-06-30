@@ -1,2 +1,20 @@
-# sistema-de-monitoramento-ambiental
-Sistema de monitoramento ambiental proprosto pela disciplina TEC499 MI - Sistemas Digitais no semestre 2022.1 no curso de Engenharia de Computação UEFS
+# ✅ Sistema de Monitoramento Ambiental
+## Sistema para obter medições de sensores em tempo real por estação de medição física ou cliente remoto.
+
+Índice
+=================
+<!--ts-->
+   * [Sobre](#Sobre)
+   * [Tabela de Conteudo](#tabela-de-conteudo)
+   * [Tecnologias](#tecnologias)
+   * [Instalação](#instalacao)
+   * [Como usar](#como-usar)
+<!--te-->
+### 🛠 Tecnologias
+
+As seguintes tecnologias e ferramentas foram usadas na construção do projeto:
+
+- C
+- Python + Flask
+- Mosquitto
+- RaspberryPi

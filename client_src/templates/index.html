@@ -11,9 +11,8 @@
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() {
     const socket = io.connect('http://' + document.domain + ':' + location.port);
-
     $('#publish').click(function(event) {
-      var topic = "medicoes"; 
+      var topic = "TP02-G01/tempo";
       var message = $('#message').val();    // tempo em segundos
       var qos = 0;  
       var data = '{"topic": "' + topic + '", "message": "' + message + '", "qos": ' + qos + '}';
@@ -21,7 +20,7 @@
     });
 
     $('#subscribe').click(function(event) {
-      var topic = "medicoes"; 
+      var topic = "TP02-G01"; 
       var qos = 0;  
       var data = '{"topic": "' + topic + '", "qos": ' + qos + '}';
       socket.emit('subscribe', data=data);
@@ -40,14 +39,37 @@
 
     socket.on('mqtt_message', function(data) {
       // console.log(data['payload']);
-      // var text = '(' + data['topic'] + ' qos: ' + data['qos'] + ') ' + data['payload'];
-      // var $textarea = $('#subscribe_messages');
-      // $textarea.val($textarea.val() + data['payload'] + '\n');
+      let lista = data['payload'].split('\n');    //
+      lista = lista.filter((item) => item !== '' ? true : false);
+      lista = lista.map((linha) => linha.split(":  "));
+      // console.log(lista);
+      let medicoes = [];    // lista de objetos tipo medicao
+      let medicao = {};
+      const regex = new RegExp(/^(\d)+:(\d)+$/);
+      for (let item = 0; item < lista.length; item++) {
+        if (lista[item].length === 1 && regex.test(lista[item][0])) {
+          if (Object.getOwnPropertyNames(medicao).length !== 0) {
+            medicoes.push(medicao);
+          }
+          medicao = { Hora: lista[item][0] };
+        } else if (lista[item][0] === 'Umi') {
+          medicao = {...medicao, Umidade: lista[item][1]};
+        } else if (lista[item][0] === 'Temp') {
+          medicao = {...medicao, Temperatura: lista[item][1].slice(-2)};
+        } else if (lista[item][0] === 'Lumi') {
+          medicao = {...medicao, Luminosidade: lista[item][1]};
+        } else if (lista[item][0] === 'Press') {
+          medicao = {...medicao, Pressão: lista[item][1]};
+        } else;
+        if (Object.getOwnPropertyNames(medicao).length !== 0 && item === lista.length-1) {
+          medicoes.push(medicao);
+        }
+      }
+      if (medicoes.length > 10) medicoes = medicoes.slice(-10);
+      // console.log(medicoes);
 
-      const list = JSON.parse(data['payload']);   // lista com objetos tipo medição
-      console.log(list);
-      let headersList = [];
-      list.forEach(element => {
+      let headersList = [];   // lista para cabeçalho
+      medicoes.forEach(element => {
         for (attribute in element) {
           if (headersList.indexOf(attribute) === -1) headersList.push(attribute);
         }
@@ -63,15 +85,21 @@
         thead.innerHTML = headersList[i];
         trow.appendChild(thead);
       }
-
       // adicionar medicoes ao conteudo da tabela
-      for (let item = 0; item < list.length; item++) {    // itera sobre itens da lista
+      for (let item = 0; item < medicoes.length; item++) {    // itera sobre itens da lista
         let trow = htmlTable.insertRow(-1);
         for (let attr = 0; attr < headersList.length; attr++) {    // itera sobre os atributos dos objetos
           let tcell = trow.insertCell(-1);
-          tcell.innerHTML = list[item][headersList[attr]];
+          tcell.innerHTML = medicoes[item][headersList[attr]];
         }
       }
+
+/**
+      // console.log(data['payload']);
+      // var text = '(' + data['topic'] + ' qos: ' + data['qos'] + ') ' + data['payload'];
+      // var $textarea = $('#subscribe_messages');
+      // $textarea.val($textarea.val() + data['payload'] + '\n');
+**/
 
       var divcontainer = document.getElementById("lugar-da-tabela");
       divcontainer.innerHTML = "";
@@ -128,23 +156,6 @@
   <hr>
   <h3>Histórico de medições</h3>
   <div id="lugar-da-tabela"></div>
-<!--
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Umidade</th>
-        <th>Temperatura</th>
-        <th>Luminosidade</th>
-        <th>Pressão</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td id="subscribe-messages"></td>
-      </tr>
-    </tbody>
-  </table>
--->
   </div>
 </body>
 {% endblock %}
