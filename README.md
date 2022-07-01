@@ -70,4 +70,4 @@ $ sudo ./pbl3
 
 ```
 
-### INTERFACE WEB (CLIENTE)
+### Interface Web (Cliente)
