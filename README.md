@@ -42,8 +42,9 @@ As seguintes tecnologias e ferramentas foram usadas na construção do projeto:
 #### ⚙️ Configuração do Ambiente
 Raspbery PI (Estação Física)
 Para conseguir rodar o código em C, devemos certificar que esteja instalado na Raspberry Pi Zero as seguintes bibliotecas:
-- <b>mosquitto</b>
+
 <ul>
+- <b>mosquitto</b>
 <li><a href="https://mosquitto.org/download/">Download</a></li>
 <li><a href="https://mosquitto.org/api/files/mosquitto-h.html">Documentação</a></li>
 </ul>
