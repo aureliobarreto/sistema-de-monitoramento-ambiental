@@ -2,7 +2,7 @@
 #include <mosquitto.h>
 #include <string.h>
 
-char *envio_de_msg = "Amanda da Silva e Aurélio Barreto";
+char *envio_de_msg = "h";
 
 int main(){
     int rc;

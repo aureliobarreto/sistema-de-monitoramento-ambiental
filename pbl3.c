@@ -81,66 +81,6 @@ void tempo(int contador)
     }
 }
 
-// Funcionamento do SUB
-
-void on_connect(struct mosquitto *mosq, void *obj, int rc)
-{
-    printf("Cliente: %d\n", *(int *)obj);
-    if (rc)
-    {
-        printf("Erro: %d\n", rc);
-        exit(-1);
-    }
-    mosquitto_subscribe(mosq, NULL, "TP02-G01/tempo", 0);
-}
-
-void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg)
-{
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    char *recebido = msg->payload;
-    int convertido = atoi(recebido);
-    tempo_cliente = convertido * 1000;
-    if (tempo_cliente != 0 && tempo_cliente > 2)
-    {
-        tempo(tempo_cliente);
-        printf("Tempo alterado em %s para %d segundos - %d-%02d-%02d %02d:%02d:%02d\n", msg->topic, convertido, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    }
-}
-
-void *sub(void *args)
-{
-    int rc, id = 12;
-
-    mosquitto_lib_init();
-
-    struct mosquitto *mosq;
-
-    mosq = mosquitto_new("TP02-G01/tempo", true, &id);
-    mosquitto_username_pw_set(mosq, "aluno", "aluno*123");
-    mosquitto_connect_callback_set(mosq, on_connect);
-    mosquitto_message_callback_set(mosq, on_message);
-
-    rc = mosquitto_connect(mosq, "10.0.0.101", 1883, 60);
-    if (rc)
-    {
-        printf("Cliente não conectado ao broker! Error: %d\n", rc);
-    }
-
-    mosquitto_loop_start(mosq);
-    printf("Pressione Enter para sair...\n");
-    getchar();
-    mosquitto_loop_stop(mosq, true);
-
-    mosquitto_disconnect(mosq);
-    mosquitto_destroy(mosq);
-    mosquitto_lib_cleanup();
-
-    return NULL;
-}
-
-//////////////////////////////////////////////////
-
 void pub(char *envio)
 {
     int rc;
@@ -266,7 +206,7 @@ void imprimir_lcd()
     {
         lcdClear(lcd);
         lcdPosition(lcd, 1, 0);
-        lcdPuts(lcd, "# Historico #");
+        lcdPuts(lcd, " Historico ");
         lcdPosition(lcd, 1, 1);
         lcdPuts(lcd, line);
         delay(1000);
@@ -308,6 +248,102 @@ void ler_historico()
     textfile = fopen("historico.txt", "w");
     fclose(textfile);
 }
+
+void solicita_historico()
+{
+    FILE *textfile;
+    char *text;
+    char *result;
+    long numbytes;
+
+    textfile = fopen("historico.txt", "rt");
+    if (textfile == NULL)
+        printf("Erro ao abrir histórico");
+
+    fseek(textfile, 0L, SEEK_END);
+    numbytes = ftell(textfile);
+    fseek(textfile, 0L, SEEK_SET);
+
+    text = (char *)calloc(numbytes, sizeof(char));
+    if (text == NULL)
+        printf("Histórico vazio");
+
+    fread(text, sizeof(char), numbytes, textfile);
+
+    pub(text);
+    fclose(textfile);
+    imprimir_lcd();
+    textfile = fopen("historico.txt", "w");
+    fclose(textfile);
+}
+
+// Funcionamento do SUB
+
+void on_connect(struct mosquitto *mosq, void *obj, int rc)
+{
+    // printf("Cliente: %d\n", *(int *)obj);
+    if (rc)
+    {
+        printf("Erro: %d\n", rc);
+        exit(-1);
+    }
+    mosquitto_subscribe(mosq, NULL, "TP02-G01/tempo", 0);
+}
+
+void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg)
+{
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char *recebido = msg->payload;
+    int convertido = atoi(recebido);
+    int hist = strcmp((char *)msg->payload, "h");
+    if (hist == 0)
+    {
+        solicita_historico();
+    }
+    else
+    {
+        tempo_cliente = convertido * 1000;
+        if (tempo_cliente != 0 && tempo_cliente > 2)
+        {
+            tempo(tempo_cliente);
+            printf("Tempo alterado em %s para %d segundos - %d-%02d-%02d %02d:%02d:%02d\n", msg->topic, convertido, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        }
+    }
+}
+
+void *sub(void *args)
+{
+    int rc, id = 12;
+
+    mosquitto_lib_init();
+
+    struct mosquitto *mosq;
+
+    mosq = mosquitto_new("TP02-G01/tempo", true, &id);
+    mosquitto_username_pw_set(mosq, "aluno", "aluno*123");
+    mosquitto_connect_callback_set(mosq, on_connect);
+    mosquitto_message_callback_set(mosq, on_message);
+
+    rc = mosquitto_connect(mosq, "10.0.0.101", 1883, 60);
+    if (rc)
+    {
+        printf("Não conectado ao broker! Error: %d\n", rc);
+    }
+
+    mosquitto_loop_start(mosq);
+    printf("##### PBL 3 - Sistemas Digitais #####\n\n");
+    getchar();
+    mosquitto_loop_stop(mosq, true);
+
+    mosquitto_disconnect(mosq);
+    mosquitto_destroy(mosq);
+    mosquitto_lib_cleanup();
+
+    return NULL;
+}
+
+//////////////////////////////////////////////////
 
 void sensor()
 {
@@ -396,12 +432,12 @@ void sensor()
 
         time_t current_time;
         struct tm *time_info;
-        char hora[8];
+        char hora[80];
 
         time(&current_time);
         time_info = localtime(&current_time);
 
-        strftime(hora, 8, "%H:%M", time_info);
+        strftime(hora, 80, "%H:%M:%S", time_info);
 
         arq = fopen("historico.txt", "at"); // Cria um arquivo texto para grava��o
         if (arq == NULL)                    // Se n�o conseguiu criar
@@ -504,15 +540,6 @@ void sensor()
             lcdPosition(lcd, 0, 1);
             lcdPuts(lcd, pressao); // Escrevendo no display
             pub(pressao);          // ENVIANDO PARA O CLIENTE
-        }
-        else
-        {
-            lcdClear(lcd);
-            lcdPosition(lcd, 4, 0);
-            lcdPuts(lcd, "PBL 3");
-            lcdPosition(lcd, 1, 1);
-            lcdPuts(lcd, "Sist. Digitais");
-            delay(2000);
         }
 
         tempo(tempo_cliente);

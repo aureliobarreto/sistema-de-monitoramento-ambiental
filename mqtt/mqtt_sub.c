@@ -19,7 +19,7 @@ void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_messag
   	struct tm tm = *localtime(&t);
 	char *recebido = msg->payload;
     int convertido = atoi(recebido);
-	printf("Mensagem recebida em %s: %d - %d-%02d-%02d %02d:%02d:%02d\n", msg->topic, convertido,  tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+	printf("Mensagem recebida em %s: %s - %d-%02d-%02d %02d:%02d:%02d\n", msg->topic, (char*) msg->payload,  tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 }
 
 int main() {
