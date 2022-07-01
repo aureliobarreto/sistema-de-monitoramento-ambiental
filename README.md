@@ -58,3 +58,30 @@ Para conseguir rodar o código em C, devemos certificar que esteja instalado na 
 <ul><p>Com o código já na raspberry para compilar e executar siga os seguintes passos
 Compilar: sudo gcc -o pbl3 pbl3.c pbl3-dev.c -lwiringPi -lwiringPiDev -lpthread -lmosquitto
 Executar: sudo ./pbl3.c </p></ul>
+
+### Pré-requisitos
+
+Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
+[Git](https://git-scm.com), [Node.js](https://nodejs.org/en/). 
+Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/)
+
+### 🎲 Rodando o Back End (servidor)
+
+```bash
+# Clone este repositório
+$ git clone <https://github.com/tgmarinho/nlw1>
+
+# Acesse a pasta do projeto no terminal/cmd
+$ cd nlw1
+
+# Vá para a pasta server
+$ cd server
+
+# Instale as dependências
+$ npm install
+
+# Execute a aplicação em modo de desenvolvimento
+$ npm run dev:server
+
+# O servidor inciará na porta:3333 - acesse <http://localhost:3333>
+```
