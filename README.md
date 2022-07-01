@@ -19,8 +19,8 @@ Sistema proposto pela disciplina TEC499 MI Sistemas Digitais
 ### Equipe de Desenvolvimento
 <div id="equipe">    
     <ul>
-		<li><a href="https://github.com/argalvao"> Abel Ramalho Galvão</li>
-		<li><a href="https://github.com/aureliobarreto"> Aurélio Rocha Barreto </a></li>
+	<li><a href="https://github.com/argalvao"> Abel Ramalho Galvão</li>
+	<li><a href="https://github.com/aureliobarreto"> Aurélio Rocha Barreto </a></li>
         <li><a href="https://github.com/amandassa"> Amanda Silva Santos </a> </li>
 	</ul>
     <h1>Tutor</h1>
@@ -43,9 +43,10 @@ As seguintes tecnologias e ferramentas foram usadas na construção do projeto:
 Raspbery PI (Estação Física)
 Para conseguir rodar o código em C, devemos certificar que esteja instalado na Raspberry Pi Zero as seguintes bibliotecas:
 - <b>mosquitto</b>
+<ul>
 <li><a href="https://mosquitto.org/download/">Download</a></li>
 <li><a href="https://mosquitto.org/api/files/mosquitto-h.html">Documentação</a></li>
-
+</ul>
 <p>Feito isso, basta efetuar a transferência desse arquivo para a raspberry:</p>
 <li><a href="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/pbl3.c">pbl3.c</a></li>
 <p>Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir o arquivo via SCP de sua máquina origem para a raspberry.</p>
