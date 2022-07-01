@@ -39,7 +39,7 @@ As seguintes tecnologias e ferramentas foram usadas na construção do projeto:
 - RaspberryPi Zero
 - MQT
 
-#### ⚙️ Configuração do Ambiente
+### ⚙️ Configuração do Ambiente
 Raspbery PI (Estação Física)
 Para conseguir rodar o código em C, devemos certificar que esteja instalado na Raspberry Pi Zero as seguintes bibliotecas:
 
@@ -48,7 +48,7 @@ Para conseguir rodar o código em C, devemos certificar que esteja instalado na 
 	<li><a href="https://mosquitto.org/download/">Download</a></li>
 	<li><a href="https://mosquitto.org/api/files/mosquitto-h.html">Documentação</a></li>
 </ul>
-<p>Feito isso, basta efetuar a transferência desse arquivo para a raspberry:</p>
+<p>Feito isso, basta seguir os seguintes passos:</p>
 	<li><a href="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/pbl3.c">pbl3.c</a></li>
 	
 <ul>
@@ -65,23 +65,19 @@ Antes de começar, você vai precisar ter instalado em sua máquina as seguintes
 [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/). 
 Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/)
 
-### 🎲 Rodando o Back End (servidor)
+### 🎲 Feito isso siga esses passos
 
 ```bash
 # Clone este repositório
-$ git clone <https://github.com/tgmarinho/nlw1>
+$ git clone <https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental>
 
 # Acesse a pasta do projeto no terminal/cmd
-$ cd nlw1
+$ cd sistema-de-monitoramento-ambiental
 
-# Vá para a pasta server
-$ cd server
+# Compile o arquivo .C utilizando o arquivo Makefile que está no diretório
+$ sudo make
 
-# Instale as dependências
-$ npm install
+# Execute a aplicação
+$ sudo ./pbl3
 
-# Execute a aplicação em modo de desenvolvimento
-$ npm run dev:server
-
-# O servidor inciará na porta:3333 - acesse <http://localhost:3333>
 ```
