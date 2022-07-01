@@ -297,6 +297,7 @@ void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_messag
     char *recebido = msg->payload;
     int convertido = atoi(recebido);
     int hist = strcmp((char *)msg->payload, "h");
+    char* tempo_invalido = "Tempo solicitado não pode ser inferior a 2 segundos\n";
     if (hist == 0)
     {
         solicita_historico();
@@ -308,6 +309,8 @@ void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_messag
         {
             tempo(tempo_cliente);
             printf("Tempo alterado em %s para %d segundos - %d-%02d-%02d %02d:%02d:%02d\n", msg->topic, convertido, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        }else{
+            printf("%s", tempo_invalido);
         }
     }
 }
@@ -513,7 +516,9 @@ void sensor()
             printf("Luminosidade: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(0), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
             lcdPosition(lcd, 0, 0);
             lcdPuts(lcd, luminosidade); // Escrevendo no display
-            pub(luminosidade);          // ENVIANDO PARA O CLIENTE
+            char lumi[80];
+            strcat(strcpy(lumi, "Luminosidade: "), array1);
+            pub(lumi);          // ENVIANDO PARA O CLIENTE
         }
         else if (digitalRead(chave1) == HIGH && digitalRead(chave2) == HIGH && digitalRead(chave3) == HIGH && digitalRead(chave4) == LOW)
         {
@@ -523,7 +528,9 @@ void sensor()
             lcdPosition(lcd, 0, 1);
             lcdPuts(lcd, pressao); // Escrevendo no display
 
-            pub(pressao); // ENVIANDO PARA O CLIENTE
+            char pre[80];
+            strcat(strcpy(pre, "Pressão: "), array2);
+            pub(pre); // ENVIANDO PARA O CLIENTE
         }
         else if (digitalRead(chave1) == HIGH && digitalRead(chave2) == HIGH && digitalRead(chave3) == LOW && digitalRead(chave4) == LOW)
         {
@@ -532,14 +539,18 @@ void sensor()
             printf("Luminosidade: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(0), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
             lcdPosition(lcd, 0, 0);
             lcdPuts(lcd, luminosidade); // Escrevendo no display
-            pub(luminosidade);          // ENVIANDO PARA O CLIENTE
+            char lumi[80];
+            strcat(strcpy(lumi, "Luminosidade: "), array1);
+            pub(lumi);          // ENVIANDO PARA O CLIENTE
 
             sprintf(array2, "%.2f", temp2);
             strcat(strcpy(pressao, "Pre: "), array2);
             printf("Pressão: %.2f | %d-%02d-%02d %02d:%02d:%02d\n", readVoltage(1), tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
             lcdPosition(lcd, 0, 1);
             lcdPuts(lcd, pressao); // Escrevendo no display
-            pub(pressao);          // ENVIANDO PARA O CLIENTE
+            char pre[80];
+            strcat(strcpy(pre, "Pressão: "), array2);
+            pub(pre); // ENVIANDO PARA O CLIENTE
         }
 
         tempo(tempo_cliente);
@@ -570,15 +581,16 @@ void remTempo()
     if (digitalRead(botao3) == LOW)
     {
         delay(500);
+        tempo_cliente = tempo_cliente - 1000;
         if (tempo_cliente < 2000)
         {
             printf("#### Tempo de medição não pode ser menor que dois segundos ####\n");
             tempo_cliente = 2000;
+            int temp = tempo_cliente / 1000;
             printf("#### Tempo de medição atualizado para: %d segundos\n", temp);
         }
         else
         {
-            tempo_cliente = tempo_cliente - 1000;
             int temp = tempo_cliente / 1000;
             printf("#### Tempo de medição atualizado para: %d segundos\n", temp);
         }
