@@ -39,8 +39,8 @@ As seguintes tecnologias e ferramentas foram usadas na construção do projeto:
 - RaspberryPi Zero
 - MQT
 
-### ⚙️ Configuração do Ambiente
-Raspbery PI (Estação Física)
+## ⚙️ Configuração do Ambiente
+###Raspbery PI (Estação Física)
 Para conseguir rodar o programa em C, devemos certificar que esteja instalado na Raspberry Pi Zero a biblioteca:
 
 <ul>
