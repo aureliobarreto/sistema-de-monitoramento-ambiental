@@ -43,10 +43,10 @@ As seguintes tecnologias e ferramentas foram usadas na construção do projeto:
 Raspbery PI (Estação Física)
 Para conseguir rodar o código em C, devemos certificar que esteja instalado na Raspberry Pi Zero as seguintes bibliotecas:
 - <b>mosquitto</b>
-Donwload: https://mosquitto.org/download/
-Documentação: https://mosquitto.org/api/files/mosquitto-h.html
+<li><a href="https://mosquitto.org/download/">Download</a></li>
+<li><a href="https://mosquitto.org/api/files/mosquitto-h.html">Documentação</a></li>
 
-Feito isso, basta efetuar a transferência desse arquivo para a raspberry:
+<li>Feito isso, basta efetuar a transferência desse arquivo para a raspberry:</li>
 <li><a href="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/pbl3.c">pbl3.c</a></li>
 Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir o arquivo via SCP de sua máquina origem para a raspberry.
 
