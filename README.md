@@ -41,31 +41,19 @@ As seguintes tecnologias e ferramentas foram usadas na construção do projeto:
 
 ### ⚙️ Configuração do Ambiente
 Raspbery PI (Estação Física)
-Para conseguir rodar o código em C, devemos certificar que esteja instalado na Raspberry Pi Zero as seguintes bibliotecas:
+Para conseguir rodar o programa em C, devemos certificar que esteja instalado na Raspberry Pi Zero a biblioteca:
 
 <ul>
 	<li><b>mosquitto</b></li>
 	<li><a href="https://mosquitto.org/download/">Download</a></li>
 	<li><a href="https://mosquitto.org/api/files/mosquitto-h.html">Documentação</a></li>
 </ul>
-<p>Feito isso, basta seguir os seguintes passos:</p>
-	<li><a href="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/pbl3.c">pbl3.c</a></li>
 	
 <ul>
-	<p>Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir o arquivo via SCP de sua máquina origem para a raspberry.</p> 
+	<p>Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir a biblioteca e a pasta do repositório via SCP de sua máquina origem para a raspberry.</p> 
 </ul>
 
-<ul><p>Com o código já na raspberry para compilar e executar siga os seguintes passos
-Compilar: sudo gcc -o pbl3 pbl3.c pbl3-dev.c -lwiringPi -lwiringPiDev -lpthread -lmosquitto
-Executar: sudo ./pbl3.c </p></ul>
-
-### Pré-requisitos
-
-Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
-[Git](https://git-scm.com), [Node.js](https://nodejs.org/en/). 
-Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/)
-
-### 🎲 Feito isso siga esses passos
+### 📜 Com acesso a sua Raspberry siga os seguintes passos
 
 ```bash
 # Clone este repositório
