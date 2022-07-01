@@ -17,7 +17,7 @@
 Sistema proposto pela disciplina TEC499 MI Sistemas Digitais 
 
 ### Equipe de Desenvolvimento
-<div id="equipe">    
+<div id="equipe-de-desenvolvimento">    
     <ul>
 	<li><a href="https://github.com/argalvao"> Abel Ramalho Galvão</li>
 	<li><a href="https://github.com/aureliobarreto"> Aurélio Rocha Barreto </a></li>
@@ -29,7 +29,7 @@ Sistema proposto pela disciplina TEC499 MI Sistemas Digitais
     </ul>
 </div>
 
-### 🛠 Tecnologias
+### 🛠 Tecnologias (#tecnologias)
 
 As seguintes tecnologias e ferramentas foram usadas na construção do projeto:
 
