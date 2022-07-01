@@ -44,9 +44,9 @@ Raspbery PI (Estação Física)
 Para conseguir rodar o código em C, devemos certificar que esteja instalado na Raspberry Pi Zero as seguintes bibliotecas:
 
 <ul>
-<b>mosquitto</b>
-<li><a href="https://mosquitto.org/download/">Download</a></li>
-<li><a href="https://mosquitto.org/api/files/mosquitto-h.html">Documentação</a></li>
+	<li><b>mosquitto</b></li>
+	<li><a href="https://mosquitto.org/download/">Download</a></li>
+	<li><a href="https://mosquitto.org/api/files/mosquitto-h.html">Documentação</a></li>
 </ul>
 <p>Feito isso, basta efetuar a transferência desse arquivo para a raspberry:</p>
 <li><a href="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/pbl3.c">pbl3.c</a></li>
