@@ -44,7 +44,7 @@ Raspbery PI (Estação Física)
 Para conseguir rodar o código em C, devemos certificar que esteja instalado na Raspberry Pi Zero as seguintes bibliotecas:
 
 <ul>
-- <b>mosquitto</b>
+<b>mosquitto</b>
 <li><a href="https://mosquitto.org/download/">Download</a></li>
 <li><a href="https://mosquitto.org/api/files/mosquitto-h.html">Documentação</a></li>
 </ul>
