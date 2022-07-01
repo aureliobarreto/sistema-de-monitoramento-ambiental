@@ -10,8 +10,8 @@ eventlet.monkey_patch()
 app = Flask(__name__)       #instancia flask
 app.config['SECRET'] = 'my secret key'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.config['MQTT_BROKER_URL'] = '127.0.0.1'
-# app.config['MQTT_BROKER_URL'] = '10.0.0.101'     ## mudar para o broker do LEDS!!!
+# app.config['MQTT_BROKER_URL'] = '127.0.0.1'
+app.config['MQTT_BROKER_URL'] = '10.0.0.101'     ## mudar para o broker do LEDS!!!
 app.config['MQTT_BROKER_PORT'] = 1883
 app.config['MQTT_USERNAME'] = 'aluno'
 app.config['MQTT_PASSWORD'] = 'aluno*123'
