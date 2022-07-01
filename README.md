@@ -23,7 +23,7 @@ Sistema proposto pela disciplina TEC499 MI Sistemas Digitais
 	<li><a href="https://github.com/aureliobarreto"> Aurélio Rocha Barreto </a></li>
         <li><a href="https://github.com/amandassa"> Amanda Silva Santos </a> </li>
 	</ul>
-    <h1>Tutor</h1>
+    <h3>Tutor</h3>
     <ul>
         <li><a href="https://github.com/thiagocj">Thiago Cerqueira de Jesus</a></li>
     </ul>
@@ -40,7 +40,7 @@ As seguintes tecnologias e ferramentas foram usadas na construção do projeto:
 - MQT
 
 ## ⚙️ Configuração do Ambiente
-###Raspbery PI (Estação Física)
+### Raspbery PI (Estação Física)
 Para conseguir rodar o programa em C, devemos certificar que esteja instalado na Raspberry Pi Zero a biblioteca:
 
 <ul>
