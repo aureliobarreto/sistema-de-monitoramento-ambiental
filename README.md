@@ -74,8 +74,6 @@ $ git clone <https://github.com/aureliobarreto/sistema-de-monitoramento-ambienta
 $ cd sistema-de-monitoramento-ambiental
 # Compile o projeto em C utilizando o arquivo Makefile que está no diretório
 $ sudo make
-# Execute a aplicação
-$ sudo ./pbl3
 ```
     <p  align="justify">Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir a biblioteca e a pasta do repositório via SCP de sua máquina origem para o Raspberry.</p> 
     <h1>Interface Web (Estação Remota)</h1>
