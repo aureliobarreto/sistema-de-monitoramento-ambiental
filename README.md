@@ -23,15 +23,16 @@
     O projeto proposto pela disciplina <b><a href="http://sites.ecomp.uefs.br/tec499/2016-1">TEC499 - MI Sistemas Digitais</a></b> trata-se de um protótipo de um sistema para
     monitoramento ambiental que controla sensores analógicos e digitais e uma IHM (Interface Homem-Máquina) para apresentação das informações.
     </p>
-    <h3>SBC (Single Board Bomputer)</h3>
+    <h3>SBC (Single Board Computer)</h3>
     <p align="justify">
-    O protótipo foi desenvolvido na SBC Raspberry Pi Zero e mede temperatura, umidade, pressão atmosférica e luminosidade. O protótipo apresenta em tempo real as informações de leitura em um display de LCD com base na seleção de chaves, sendo 4 chaves, uma para cada tipo de leitura. É realizado também o armazenamento do histórico das últimas 10 medições realizadas. O protótipo conta ainda com 3 botões, um para exibir o histórico de medições e outros dois para incrementar e decrementar o tempo de leitura dos sensores.
+    O protótipo foi desenvolvido na SBC Raspberry Pi Zero e mede temperatura, umidade, pressão atmosférica e luminosidade. O produto apresenta em tempo real as informações de leitura em um display de LCD 16x2 com base na seleção de chaves, sendo 4 chaves, uma para cada tipo de leitura. É realizado também o armazenamento do histórico das últimas 10 medições realizadas. O protótipo conta ainda com 3 botões, um para exibir o histórico de medições e outros dois para incrementar e decrementar o intervalo de leitura dos sensores.
     </p>
     <h4>MQTT (Message Queuing Telemetry Transport)</h4>
     <p align="justify">
-    O protocolo MQTT foi implementado para realizar a comunicação da <a href="#estacao_local">estação local</a> (SBC) com uma estação remota (Web). Ele é utilizado para enviar em tempo real as medições que estão sendo exibidas no display da estação local. Uma vez que o botão de exibição do histórico é pressionado, o protocolo MQTT também é utilizado para realizar o envio do histórico para a <a href="#estacao_remota">estação remota</a>.
+    O protocolo MQTT foi implementado para realizar a comunicação da <a href="#estacao_local">estação local</a> (SBC) com uma estação remota (Web). Ele é utilizado para enviar em tempo real as medições que estão sendo exibidas no display da estação local. Uma vez que o botão de exibição do histórico é pressionado, o protocolo MQTT também é utilizado para realizar o envio do histórico para o <a href="#estacao_remota">painel remoto</a>.
     </p>
     <h3>Cliente Web</h3>
+    As medições realizadas pelo módulo da SBC enviadas via MQTT são exibidas neste painel de monitoramento em tempo real. O cliente também pode solicitar a visualização do histórico de medições com os 10 últimos registros e alterar o intervalo entre as medições. As solicitações são enviadas via MQTT para a estação de medição na SBC.
 </div>
 
 
@@ -40,7 +41,7 @@
     <ul>
 	<li><a href="https://github.com/argalvao"> Abel Ramalho Galvão</li>
 	<li><a href="https://github.com/aureliobarreto"> Aurélio Rocha Barreto </a></li>
-        <li><a href="https://github.com/amandassa"> Amanda Silva Santos </a> </li>
+    <li><a href="https://github.com/amandassa"> Amanda Silva Santos </a> </li>
 	</ul>
     <h3>Tutor</h3>
     <ul>
@@ -91,7 +92,22 @@ $ sudo make
 <div id="configuracao-remota">
 <h4>Para configurar a interface Web siga os seguintes passos:</h4>
 </div>
- 
+
+ ```bash
+# Com o repositório clonado em sua máquina, 
+# acesse a pasta do cliente no terminal
+$ cd sistema-de-monitoramento-ambiental/client_src
+# Caso não tenha Python 3 instalado globalmente, instale com:
+$ sudo apt-get install python3
+# E também o gerenciador de pacotes pip:
+$ sudo apt-get install python3-pip
+# Crie o ambiente virtual
+$ python3 -m venv .venv
+$ source .venv/bin/activate     # ative-o
+# Instale as dependências
+$ pip install -r requirements.txt
+```
+
 <div id="#executar">
     <h1>:arrow_right: Executar Aplicação</h1>
     <p>Para executar o projeto (estação local e estação remota), siga as instruções abaixo:</p>
@@ -109,7 +125,12 @@ $ sudo ./pbl3
 ```
 <div id="#ececutar-local">
     <h3>Inicializar Estação Remota</h3>
-    <p>Descrever Execução da estação remota</p>
+
+```bash
+# Com o ambiente virtual ativo e ainda no diretório /client_src, execute:
+$ flask run
+# Acesse a página localhost:5000 em seu navegador.
+```
 </div>
 
 <div id="anexos">
