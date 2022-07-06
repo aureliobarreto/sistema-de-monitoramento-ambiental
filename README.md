@@ -9,6 +9,7 @@
    * [Sobre](#sobre)
    * [Equipe de Desenvolvimento](#equipe-de-desenvolvimento)
    * [Tecnologias](#tecnologias)
+   * [Solução](#solucao)
    * [Configuração do Ambiente](#configuracao)
      * [Estação Local](#configuracao-local)
      * [Estação Remota](#configuracao-remota)
@@ -20,21 +21,24 @@
 <div id="sobre">
     <h1>:pencil: Sobre o projeto</h1>
     <p align="justify">
-    O projeto proposto pela disciplina <b><a href="http://sites.ecomp.uefs.br/tec499/2016-1">TEC499 - MI Sistemas Digitais</a></b> trata-se de um protótipo de um sistema para
-    monitoramento ambiental que controla sensores analógicos e digitais e uma IHM (Interface Homem-Máquina) para apresentação das informações.
+    O projeto proposto pela disciplina <b><a href="http://sites.ecomp.uefs.br/tec499">TEC499 - MI Sistemas Digitais</a></b> trata-se de um protótipo de um sistema para monitoramento ambiental que controla sensores analógicos e digitais e uma IHM (Interface Homem-Máquina) para apresentação das informações.
     </p>
+</div>
+
+<div id="solucao">
+    <h1>💡 Solução</h1>
     <h3>SBC (Single Board Computer)</h3>
     <p align="justify">
     O protótipo foi desenvolvido na SBC Raspberry Pi Zero e mede temperatura, umidade, pressão atmosférica e luminosidade. O produto apresenta em tempo real as informações de leitura em um display de LCD 16x2 com base na seleção de chaves, sendo 4 chaves, uma para cada tipo de leitura. É realizado também o armazenamento do histórico das últimas 10 medições realizadas. O protótipo conta ainda com 3 botões, um para exibir o histórico de medições e outros dois para incrementar e decrementar o intervalo de leitura dos sensores.
     </p>
-    <h4>MQTT (Message Queuing Telemetry Transport)</h4>
+    <h3>MQTT (Message Queuing Telemetry Transport)</h3>
     <p align="justify">
     O protocolo MQTT foi implementado para realizar a comunicação da <a href="#estacao_local">estação local</a> (SBC) com uma estação remota (Web). Ele é utilizado para enviar em tempo real as medições que estão sendo exibidas no display da estação local. Uma vez que o botão de exibição do histórico é pressionado, o protocolo MQTT também é utilizado para realizar o envio do histórico para o <a href="#estacao_remota">painel remoto</a>.
     </p>
     <h3>Cliente Web</h3>
     As medições realizadas pelo módulo da SBC enviadas via MQTT são exibidas neste painel de monitoramento em tempo real. O cliente também pode solicitar a visualização do histórico de medições com os 10 últimos registros e alterar o intervalo entre as medições. As solicitações são enviadas via MQTT para a estação de medição na SBC.
+    O servidor web foi implementado usando o framework Flask em Python e a biblioteca Flask MQTT para comunicação com o broker.
 </div>
-
 
 <div id="equipe-de-desenvolvimento">    
     <h1>:man_technologist: Equipe de Desenvolvimento</h1>
@@ -53,14 +57,14 @@
     <h1>🛠 Tecnologias</h1>
     <p>As seguintes tecnologias e ferramentas foram usadas na construção do projeto:</p>
     <ul>
-    <li><a href="https://www.ibm.com/docs/pt/i/7.2?topic=languages-c-c">C</li>
-    <li><a href="https://docs.python.org/3/">Python</li>
-    <li><a href="https://flask.palletsprojects.com/en/2.1.x/">Flask</li>
-    <li><a href="https://mqtt.org/">MQTT</li>
-    <li><a href="https://www.raspberrypi.com/products/raspberry-pi-zero/">RaspberryPi Zero</li>
+        <li><a href="https://www.ibm.com/docs/pt/i/7.2?topic=languages-c-c">C</li>
+        <li><a href="https://docs.python.org/3/">Python</li>
+        <li><a href="https://flask.palletsprojects.com/en/2.1.x/">Flask</li>
+        <li><a href="https://mqtt.org/">MQTT</li>
+        <li><a href="https://www.raspberrypi.com/products/raspberry-pi-zero/">
+        RaspberryPi Zero</li>
     </ul>
 </div>
-
 
 <div id="configuracao">
     <h1>⚙️ Configuração do Ambiente</h1>
@@ -115,7 +119,6 @@ $ pip install -r requirements.txt
 
 <div id="#executar-local">
     <h3>Inicializar Estação Local</h3>
-</div>
 
 ```bash
 # Acesse a pasta do projeto no terminal
@@ -123,18 +126,25 @@ $ cd sistema-de-monitoramento-ambiental
 # Execute o projeto utilizando o comando
 $ sudo ./pbl3
 ```
-<div id="#ececutar-local">
+
+</div>
+<div id="#executar-local">
     <h3>Inicializar Estação Remota</h3>
 
 ```bash
 # Com o ambiente virtual ativo e ainda no diretório /client_src, execute:
 $ flask run
-# Acesse a página localhost:5000 em seu navegador.
+# Acesse a página localhost:5000 em seu navegador e clique em "Iniciar".
 ```
 </div>
 
+<div id="consideracoes-finais">
+    <h1>Considerações finais:</h1>
+    <p>Considerações finais</p>
+</div>
+
 <div id="anexos">
-	<h1> Anexos </h1>
+	<h1>📎 Anexos </h1>
     <div id="estacao_local" style="display: inline_block" align="center">
 			<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/imagens/estacao_local.jpeg"/><br>
 		<p>
