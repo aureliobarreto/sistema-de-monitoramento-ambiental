@@ -88,13 +88,13 @@ $ sudo ./pbl3
 <div id="anexos">
 	<h1> Anexos </h1>
     <div id="raspberry-pi-zero" style="display: inline_block" align="center">
-			<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/imagens/estacao_local.jpeg"/><br>
+			<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/imagens/estacao_local.jpeg"/><br>
 		<p>
 		<b>Imagem 01</b> - Estação local. 
 		</p>
 	</div>
 	<div id="fpga" style="display: inline_block" align="center">
-			<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/imagens/estacao_remota.png"/><br>
+			<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/imagens/estacao_remota.png"/><br>
 		<p>
 		<b>Imagem 02</b> - Estação remota. <b>
 		</p>
