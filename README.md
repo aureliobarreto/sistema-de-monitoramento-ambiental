@@ -8,7 +8,6 @@
 <!--ts-->
    * [Sobre](#sobre)
    * [Equipe de Desenvolvimento](#equipe-de-desenvolvimento)
-   * [Tabela de Conteudo](#tabela-de-conteudo)
    * [Tecnologias](#tecnologias)
    * [Configuração do Ambiente](#instalacao)
    * [Como usar](#como-usar)
@@ -31,8 +30,8 @@
 </div>
 
 
-### Equipe de Desenvolvimento
 <div id="equipe-de-desenvolvimento">    
+    <h1>Equipe de Desenvolvimento</h1>
     <ul>
 	<li><a href="https://github.com/argalvao"> Abel Ramalho Galvão</li>
 	<li><a href="https://github.com/aureliobarreto"> Aurélio Rocha Barreto </a></li>
@@ -44,15 +43,17 @@
     </ul>
 </div>
 
-### 🛠 Tecnologias (#tecnologias)
-
-As seguintes tecnologias e ferramentas foram usadas na construção do projeto:
-
-- C
-- Python + Flask
-- Mosquitto
-- RaspberryPi Zero
-- MQT
+<div id="tecnologias">
+    <h1>🛠 Tecnologias</h1>
+    <p>As seguintes tecnologias e ferramentas foram usadas na construção do projeto:</p>
+    <ul>
+    <li><a href="https://www.ibm.com/docs/pt/i/7.2?topic=languages-c-c">C</li>
+    <li><a href="https://docs.python.org/3/">Python</li>
+    <li><a href="https://flask.palletsprojects.com/en/2.1.x/">Flask</li>
+    <li><a href="https://mqtt.org/">MQTT</li>
+    <li><a href="https://www.raspberrypi.com/products/raspberry-pi-zero/">RaspberryPi Zero</li>
+    </ul>
+</div>
 
 ## ⚙️ Configuração do Ambiente
 ### Raspbery PI (Estação Física)
