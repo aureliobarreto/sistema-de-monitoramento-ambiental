@@ -15,7 +15,7 @@
 <div id="sobre">
     <h1>Sobre o projeto</h1>
     <p align="justify">
-    O projeto proposto pela disciplina <b><li><a href="http://sites.ecomp.uefs.br/tec499/2016-1">TEC499 - MI Sistemas Digitais</li></b> trata-se de um protótipo de um sistema para
+    O projeto proposto pela disciplina <b><a href="http://sites.ecomp.uefs.br/tec499/2016-1">TEC499 - MI Sistemas Digitais</b> trata-se de um protótipo de um sistema para
     monitoramento ambiental que controla sensores analógicos e digitais e uma IHM (Interface Homem-Máquina) para apresentação das informações.
     </p>
     <h3>SBC (Single Board Bomputer)</h3>
