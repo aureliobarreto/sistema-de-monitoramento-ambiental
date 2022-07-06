@@ -13,6 +13,8 @@
      * [Estação Local](#configuracao-local)
      * [Estação Remota](#configuracao-remota)
    * [Executando Aplicação](#executar)
+     * [Inicializando Estação Local](#executar-local)
+     * [Inicializando Estação Remota](#executar-remota)
    * [Anexos](#anexos)
 <!--te-->
 <div id="sobre">
@@ -90,8 +92,25 @@ $ sudo make
 <h4>Para configurar a interface Web siga os seguintes passos:</h4>
 </div>
  
-	
+<div id="#executar">
+    <h1>:arrow_right: Executar Aplicação</h1>
+    <p>Para executar o projeto (estação local e estação remota), siga as instruções abaixo:</p>
+</div>
 
+<div id="#executar-local">
+    <h3>Inicializar Estação Local</h3>
+</div>
+
+```bash
+# Acesse a pasta do projeto no terminal
+$ cd sistema-de-monitoramento-ambiental
+# Execute o projeto utilizando o comando
+$ sudo ./pbl3
+```
+<div id="#ececutar-local">
+    <h3>Inicializar Estação Remota</h3>
+    <p>Descrever Execução da estação remota</p>
+</div>
 
 <div id="anexos">
 	<h1> Anexos </h1>
