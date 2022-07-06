@@ -9,7 +9,7 @@
    * [Sobre](#sobre)
    * [Equipe de Desenvolvimento](#equipe-de-desenvolvimento)
    * [Tecnologias](#tecnologias)
-   * [Configuração do Ambiente](#instalacao)
+   * [Configuração do Ambiente](#configuracao)
    * [Como usar](#como-usar)
    * [Anexos](#anexos)
 <!--te-->
@@ -60,16 +60,18 @@
 ### Raspbery PI (Estação Física)
 Para conseguir rodar o programa em C, devemos certificar que esteja instalado na Raspberry Pi Zero a biblioteca:
 
-<ul>
-	<li><b>mosquitto</b></li>
-	<li><a href="https://mosquitto.org/download/">Download</a></li>
-	<li><a href="https://mosquitto.org/api/files/mosquitto-h.html">Documentação</a></li>
-</ul>
+<div id="configuracao">
+    <h1>⚙️ Configuração do Ambiente</h1>
+    <h3>Raspbery PI (Estação Física)</h3>
+    <p  align="justify">Para conseguir executar o programa em C, devemos certificar que esteja instalado na Raspberry Pi Zero as seguintes bibliotecas:</p>
+    <ul>
+        <li><a href="http://wiringpi.com/download-and-install/">WiringPi</a></li>  
+        <li><a href="https://github.com/ControlEverythingCommunity/ADS1115">ADS1115</a></li>
+        <li><a href="https://mosquitto.org/download/">Mosquitto</a></li>
+    </ul>
+    <p  align="justify">Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir a biblioteca e a pasta do repositório via SCP de sua máquina origem para o Raspberry.</p> 
+</div>
 	
-<ul>
-	<p>Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir a biblioteca e a pasta do repositório via SCP de sua máquina origem para a raspberry.</p> 
-</ul>
-
 ### 📜 Com acesso a sua Raspberry siga os seguintes passos
 
 ```bash
