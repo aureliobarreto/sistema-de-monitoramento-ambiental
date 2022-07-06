@@ -31,7 +31,7 @@
 
 
 <div id="equipe-de-desenvolvimento">    
-    <h1>Equipe de Desenvolvimento</h1>
+    <h1>:man_technologist: Equipe de Desenvolvimento</h1>
     <ul>
 	<li><a href="https://github.com/argalvao"> Abel Ramalho Galvão</li>
 	<li><a href="https://github.com/aureliobarreto"> Aurélio Rocha Barreto </a></li>
