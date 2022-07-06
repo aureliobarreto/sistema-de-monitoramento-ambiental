@@ -68,10 +68,11 @@
         <li><a href="https://github.com/ControlEverythingCommunity/ADS1115">ADS1115</a></li>
         <li><a href="https://mosquitto.org/download/">Mosquitto</a></li>
     </ul>
+    <h3>Interface Web (Estação Remota)</h3>
 </div>
 
 <div id="configuracao-local">
-<h3>:wrench: Com acesso a sua Raspberry siga os seguintes passos:<h3>
+<h4>Para configurar a Raspberry siga os seguintes passos:<h4>
 </div>
 
 ```bash
@@ -85,7 +86,7 @@ $ sudo make
 <p  align="justify">Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir a biblioteca e a pasta do repositório via SCP de sua máquina origem para o Raspberry.</p> 
 
 <div id="configuracao-remota">
-<h3>Interface Web (Estação Remota)</h3>
+<h4>Para configurar a interface Web siga os seguintes passos:</h4>
 </div>
  
 	
