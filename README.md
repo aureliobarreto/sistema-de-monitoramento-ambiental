@@ -33,7 +33,7 @@
     </p>
     <h3>MQTT (Message Queuing Telemetry Transport)</h3>
     <p align="justify">
-    O protocolo MQTT foi implementado para realizar a comunicação da <a href="#estacao_local">estação local</a> (SBC) com uma estação remota (Web). Ele é utilizado para enviar em tempo real as medições que estão sendo exibidas no display da estação local. Uma vez que o botão de exibição do histórico é pressionado, o protocolo MQTT também é utilizado para realizar o envio do histórico para o <a href="#estacao_remota">painel remoto</a>.
+    O protocolo MQTT foi implementado para realizar a comunicação da <a href="#estacao_local">estação local</a> (SBC) com uma estação remota (Web). Ele é utilizado para enviar em tempo real as medições que estão sendo exibidas no display da estação local. Uma vez que o botão de exibição do histórico é pressionado, o protocolo MQTT também é utilizado para realizar o envio do histórico para o <a href="#estacao_remota">painel remoto</a>. Além disso, a estação local também utiliza o protocolo MQTT para receber instruções da estação remota, como alteração do tempo e solicitação de histórico. Para isso, foi configurado uma thread que fica sendo processada em paralelo à função principal, onde a estação local fica aguardando o recebimento de uma instrução, que por sua vez, realiza uma interrupção no sistema a cada solicitação de mudança de tempo ou pedido de histórico.
     </p>
     <h3>Cliente Web</h3>
     As medições realizadas pelo módulo da SBC enviadas via MQTT são exibidas neste painel de monitoramento em tempo real. O cliente também pode solicitar a visualização do histórico de medições com os 10 últimos registros e alterar o intervalo entre as medições. As solicitações são enviadas via MQTT para a estação de medição na SBC.
