@@ -29,7 +29,7 @@
     <h1>💡 Solução</h1>
     <h3>SBC (Single Board Computer)</h3>
     <p align="justify">
-    O protótipo foi desenvolvido na SBC Raspberry Pi Zero e mede temperatura, umidade, pressão atmosférica e luminosidade. O produto apresenta em tempo real as informações de leitura em um display de LCD 16x2 com base na seleção de chaves, sendo 4 chaves, uma para cada tipo de leitura. É realizado também o armazenamento do histórico das últimas 10 medições realizadas. O protótipo conta ainda com 3 botões, um para exibir o histórico de medições e outros dois para incrementar e decrementar o intervalo de leitura dos sensores.
+    O protótipo foi desenvolvido na SBC Raspberry Pi Zero e mede temperatura, umidade, pressão atmosférica e luminosidade. O produto apresenta em tempo real as informações de leitura em um display de LCD 16x2 com base na seleção de chaves, sendo 4 chaves, uma para cada tipo de leitura. É realizado também o armazenamento do histórico das últimas 10 medições realizadas. O protótipo conta ainda com 3 botões, um para exibir o histórico de medições e outros dois para incrementar e decrementar o intervalo de leitura dos sensores. Para isso, foram configuradas interrupções que verificam qualquer alteração no estado lógico dos botões que, ao serem pressionados, interrompem a função principal de leitura dos sensores e realizam as alterações de tempo ou envio/exibição de histórico.
     </p>
     <h3>MQTT (Message Queuing Telemetry Transport)</h3>
     <p align="justify">
