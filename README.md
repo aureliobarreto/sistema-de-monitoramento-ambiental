@@ -25,7 +25,7 @@
     </p>
     <h4>MQTT (Message Queuing Telemetry Transport)</h4>
     <p align="justify">
-    O protocolo MQTT foi implementado para realizar a comunicação da estação local (SBC) com uma estação remota (Web). Ele é utilizado para enviar em tempo real as medições que estão sendo exibidas no display da estação local. Uma vez que o botão de exibição do histórico é pressionado, o protocolo MQTT também é utilizado para realizar o envio do histórico para a estação remota.
+    O protocolo MQTT foi implementado para realizar a comunicação da <a href="#estacao_local">estação local</a> (SBC) com uma estação remota (Web). Ele é utilizado para enviar em tempo real as medições que estão sendo exibidas no display da estação local. Uma vez que o botão de exibição do histórico é pressionado, o protocolo MQTT também é utilizado para realizar o envio do histórico para a <a href="#estacao_remota">estação remota</a>.
     </p>
     <h3>Cliente Web</h3>
 </div>
@@ -87,13 +87,13 @@ $ sudo ./pbl3
 
 <div id="anexos">
 	<h1> Anexos </h1>
-    <div id="raspberry-pi-zero" style="display: inline_block" align="center">
+    <div id="estacao_local" style="display: inline_block" align="center">
 			<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/imagens/estacao_local.jpeg"/><br>
 		<p>
 		<b>Imagem 01</b> - Estação local. 
 		</p>
 	</div>
-	<div id="fpga" style="display: inline_block" align="center">
+	<div id="estacao_remota" style="display: inline_block" align="center">
 			<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/imagens/estacao_remota.png"/><br>
 		<p>
 		<b>Imagem 02</b> - Estação remota. <b>
