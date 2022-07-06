@@ -69,6 +69,7 @@
         <li><a href="https://mosquitto.org/download/">Mosquitto</a></li>
     </ul>
     <h3>Interface Web (Estação Remota)</h3>
+    <p>Listar bibliotecas</p>
 </div>
 
 <div id="configuracao-local">
