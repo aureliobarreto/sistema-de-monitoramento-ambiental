@@ -15,16 +15,16 @@
 <!--te-->
 <div id="sobre">
     <h1>Sobre o projeto</h1>
-    <p style="text-align: justify">
+    <p style="text-align: justify;">
     O projeto proposto pela disciplina <b>TEC499 - MI Sistemas Digitais</b> trata-se de um protótipo de um sistema para
     monitoramento ambiental que controla sensores analógicos e digitais e uma IHM (Interface Homem-Máquina) para apresentação das informações.
     </p>
     <h3>SBC (Single Board Bomputer)</h3>
-    <p style="text-align: justify">
+    <p style="text-align: justify;">
     O protótipo foi desenvolvido na SBC Raspberry Pi Zero e mede temperatura, umidade, pressão atmosférica e luminosidade. O protótipo apresenta em tempo real as informações de leitura em um display de LCD com base na seleção de chaves, sendo 4 chaves, uma para cada tipo de leitura. É realizado também o armazenamento do histórico das últimas 10 medições realizadas. O protótipo conta ainda com 3 botões, um para exibir o histórico de medições e outros dois para incrementar e decrementar o tempo de leitura dos sensores.
     </p>
     <h4>MQTT (Message Queuing Telemetry Transport)</h4>
-    <p style="text-align: justify">
+    <p style="text-align: justify;">
     O protocolo MQTT foi implementado para realizar a comunicação da estação local (SBC) com uma estação remota (Web). Ele é utilizado para enviar em tempo real as medições que estão sendo exibidas no display da estação local. Uma vez que o botão de exibição do histórico é pressionado, o protocolo MQTT também é utilizado para realizar o envio do histórico para a estação remota.
     </p>
     <h3>Cliente Web</h3>
