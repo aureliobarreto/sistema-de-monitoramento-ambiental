@@ -10,6 +10,8 @@
    * [Equipe de Desenvolvimento](#equipe-de-desenvolvimento)
    * [Tecnologias](#tecnologias)
    * [Configuração do Ambiente](#configuracao)
+     * [Estação Local](#configuracao-local)
+     * [Estação Remota](#configuracao-remota)
    * [Executando Aplicação](#executar)
    * [Anexos](#anexos)
 <!--te-->
@@ -66,7 +68,12 @@
         <li><a href="https://github.com/ControlEverythingCommunity/ADS1115">ADS1115</a></li>
         <li><a href="https://mosquitto.org/download/">Mosquitto</a></li>
     </ul>
-    <h3>:wrench: Com acesso a sua Raspberry siga os seguintes passos:<h3>
+</div>
+
+<div id="configuracao-local">
+<h3>:wrench: Com acesso a sua Raspberry siga os seguintes passos:<h3>
+</div>
+
 ```bash
 # Clone este repositório
 $ git clone <https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental>
@@ -75,9 +82,12 @@ $ cd sistema-de-monitoramento-ambiental
 # Compile o projeto em C utilizando o arquivo Makefile que está no diretório
 $ sudo make
 ```
-    <p  align="justify">Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir a biblioteca e a pasta do repositório via SCP de sua máquina origem para o Raspberry.</p> 
-    <h1>Interface Web (Estação Remota)</h1>
+<p  align="justify">Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir a biblioteca e a pasta do repositório via SCP de sua máquina origem para o Raspberry.</p> 
+
+<div id="configuracao-remota">
+<h3>Interface Web (Estação Remota)</h3>
 </div>
+ 
 	
 
 
