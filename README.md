@@ -11,6 +11,7 @@
    * [Tecnologias](#tecnologias)
    * [Configuração do Ambiente](#instalacao)
    * [Como usar](#como-usar)
+   * [Anexos](#anexos)
 <!--te-->
 <div id="sobre">
     <h1>:pencil: Sobre o projeto</h1>
@@ -83,3 +84,19 @@ $ sudo ./pbl3
 ```
 
 ### Interface Web (Cliente)
+
+<div id="anexos">
+	<h1> Anexos </h1>
+    <div id="raspberry-pi-zero" style="display: inline_block" align="center">
+			<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/imagens/estacao_local.jpeg"/><br>
+		<p>
+		<b>Imagem 01</b> - Estação local. 
+		</p>
+	</div>
+	<div id="fpga" style="display: inline_block" align="center">
+			<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/imagens/estacao_remota.png"/><br>
+		<p>
+		<b>Imagem 02</b> - Estação remota. <b>
+		</p>
+	</div>	
+</div>
