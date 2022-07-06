@@ -10,7 +10,7 @@
    * [Equipe de Desenvolvimento](#equipe-de-desenvolvimento)
    * [Tecnologias](#tecnologias)
    * [Configuração do Ambiente](#configuracao)
-   * [Como usar](#como-usar)
+   * [Executando Aplicação](#executar)
    * [Anexos](#anexos)
 <!--te-->
 <div id="sobre">
@@ -56,36 +56,32 @@
     </ul>
 </div>
 
-## ⚙️ Configuração do Ambiente
-### Raspbery PI (Estação Física)
-Para conseguir rodar o programa em C, devemos certificar que esteja instalado na Raspberry Pi Zero a biblioteca:
 
 <div id="configuracao">
     <h1>⚙️ Configuração do Ambiente</h1>
-    <h3>Raspbery PI (Estação Física)</h3>
+    <h3>Raspbery PI Zero (Estação Local)</h3>
     <p  align="justify">Para conseguir executar o programa em C, devemos certificar que esteja instalado na Raspberry Pi Zero as seguintes bibliotecas:</p>
     <ul>
         <li><a href="http://wiringpi.com/download-and-install/">WiringPi</a></li>  
         <li><a href="https://github.com/ControlEverythingCommunity/ADS1115">ADS1115</a></li>
         <li><a href="https://mosquitto.org/download/">Mosquitto</a></li>
     </ul>
-    <p  align="justify">Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir a biblioteca e a pasta do repositório via SCP de sua máquina origem para o Raspberry.</p> 
-</div>
-	
-### 📜 Com acesso a sua Raspberry siga os seguintes passos
-
+    <h3>:wrench: Com acesso a sua Raspberry siga os seguintes passos:<h3>
 ```bash
 # Clone este repositório
 $ git clone <https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental>
-# Acesse a pasta do projeto no terminal/cmd
+# Acesse a pasta do projeto no terminal
 $ cd sistema-de-monitoramento-ambiental
-# Compile o arquivo .C utilizando o arquivo Makefile que está no diretório
+# Compile o projeto em C utilizando o arquivo Makefile que está no diretório
 $ sudo make
 # Execute a aplicação
 $ sudo ./pbl3
 ```
+    <p  align="justify">Caso sua raspberry não possua acesso à Internet você pode acessá-la via SSH e transferir a biblioteca e a pasta do repositório via SCP de sua máquina origem para o Raspberry.</p> 
+    <h1>Interface Web (Estação Remota)</h1>
+</div>
+	
 
-### Interface Web (Cliente)
 
 <div id="anexos">
 	<h1> Anexos </h1>
