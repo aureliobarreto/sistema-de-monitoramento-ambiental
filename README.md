@@ -145,7 +145,8 @@ $ flask run
 <h1>:video_game: Demonstração</h1>
 <h3>Estação Local</h3>
 <p>
-Para demosntrar o funcionamento da estação local, utiliza-se os botões e os switchs. A coleta dos dados é feita através do sensor DHT11 para umidade e temperatura e, dois potênciometros são utilizados para simular lumiosidade e pressão. Toda a exibição da leitura dos sensores é feita pelo Display de LCD.
+Para demosntrar o funcionamento da estação local, utiliza-se os botões e os switchs. A coleta dos dados é feita através do sensor DHT11 para umidade e temperatura e, dois potênciometros são utilizados para simular lumiosidade e pressão. Toda a exibição da leitura dos sensores é feita pelo Display de LCD.<br>
+<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/imagens/local_gif.gif"/>
 </p>
 </div>
 
@@ -159,6 +160,18 @@ Switch 2 > Temperatura na segunda linha do LCD
 Swichh 3 > Luminosidade na primeira linha do LCD
 Switch 4 > Pressão na quarta linha do LCD
 ```
+<h4>Utilizando os switchs:</h4>
+
+```
+Os botões são utilizados para modificar o tempo de leitura dos sensores e realizar uma chamada no histórico de medições:
+
+Botão 1 > Exibe o histórico no LCD e envia para a estação rmeota
+Botão 2 > Incrementa 1 segundo no tempo de leitura
+Botão 3 > Decrementa 1 segundo no tempo de leitura
+```
+
+<h3>Estação Remota</h3>
+
 
 <div id="melhoria">
 <h1>:tickets: Melhorias Possíveis</h1>
