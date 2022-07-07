@@ -16,6 +16,9 @@
    * [Executando Aplicação](#executar)
      * [Inicializando Estação Local](#executar-local)
      * [Inicializando Estação Remota](#executar-remota)
+   * [Demonstração](#demonstracao)
+   * [Possíveis Melhorias](#melhoria)
+   * [Considerações Finais](#consideracoes-finais)
    * [Anexos](#anexos)
 <!--te-->
 <div id="sobre">
@@ -138,9 +141,24 @@ $ flask run
 ```
 </div>
 
+<div id="demonstracao">
+<h1>:video_game: Demonstração</h1>
+</div>
+
+<div id="melhoria">
+<h1>:tickets: Melhorias Possíveis</h1>
+<ul>
+        <li>Substituição da função delay por um timer com o objetivo de otmizar a contagem de tempo</li>  
+        <li>Melhora na chamada de interrupção</li>
+        <li>Ler o arquivo de hisórico apenas uma vez para exibir no display e enviar para a estação remota</li>
+    </ul>
+</div>
+
 <div id="consideracoes-finais">
     <h1>:label: Considerações finais:</h1>
-    <p>Considerações finais</p>
+    <p>
+   O projeto proposto cumpre todos os requisitos solicitados no problema, porém, é passivo de melhorias como a exibição do histório no display de LCD, onde linhas vazias do arquivo de histórico acabam reproduzindo caracteres sem sentido e no uso das interrupções dos botões. Faz-se necessário também, implemntar validações no envio das solicitações do cliente para a estação local.
+    </p>
 </div>
 
 <div id="anexos">
