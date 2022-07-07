@@ -146,8 +146,8 @@ $ flask run
 <h3>Estação Local</h3>
 <p>
 Para demosntrar o funcionamento da estação local, utiliza-se os botões e os switchs. A coleta dos dados é feita através do sensor DHT11 para umidade e temperatura e, dois potênciometros são utilizados para simular lumiosidade e pressão. Toda a exibição da leitura dos sensores é feita pelo Display de LCD.
-
 </p>
+https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/videos/local.mp4
 </div>
 
 <h4>Utilizando os switchs:</h4>
