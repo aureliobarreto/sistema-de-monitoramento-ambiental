@@ -155,7 +155,7 @@ $ flask run
 </div>
 
 <div id="consideracoes-finais">
-    <h1>:label: Considerações finais:</h1>
+    <h1>:label: Considerações finais</h1>
     <p>
    O projeto proposto cumpre todos os requisitos solicitados no problema, porém, é passivo de melhorias como a exibição do histório no display de LCD, onde linhas vazias do arquivo de histórico acabam reproduzindo caracteres sem sentido e no uso das interrupções dos botões. Faz-se necessário também, implemntar validações no envio das solicitações do cliente para a estação local.
     </p>
