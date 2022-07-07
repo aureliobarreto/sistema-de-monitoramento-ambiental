@@ -162,7 +162,7 @@ Switch 2 > Temperatura na segunda linha do LCD
 Swichh 3 > Luminosidade na primeira linha do LCD
 Switch 4 > Pressão na quarta linha do LCD
 ```
-<h4>Utilizando os switchs:</h4>
+<h4>Utilizando os botões:</h4>
 
 ```
 Os botões são utilizados para modificar o tempo e exibir histórico de medições:
@@ -197,8 +197,8 @@ Ver Histórico > Solicita o histórico das 10 últimas medições
 
 <div id="consideracoes-finais">
     <h1>:label: Considerações finais</h1>
-    <p>
-   O projeto proposto cumpre todos os requisitos solicitados no problema, porém, é passivo de melhorias como a exibição do histório no display de LCD, onde linhas vazias do arquivo de histórico acabam reproduzindo caracteres sem sentido e no uso das interrupções dos botões. Faz-se necessário também, implemntar validações no envio das solicitações do cliente para a estação local.
+    <p align="justify">
+   O projeto proposto cumpre todos os requisitos solicitados no problema, porém, é passivo de melhorias como a exibição do histório no display de LCD, onde linhas vazias do arquivo de histórico acabam reproduzindo caracteres sem sentido e no uso das interrupções dos botões. Faz-se necessário também, implmentar validações no envio das solicitações do cliente para a estação local.
     </p>
 </div>
 
