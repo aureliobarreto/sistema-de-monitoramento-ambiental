@@ -146,10 +146,8 @@ $ flask run
 <h3>Estação Local</h3>
 <p>
 Para demosntrar o funcionamento da estação local, utiliza-se os botões e os switchs. A coleta dos dados é feita através do sensor DHT11 para umidade e temperatura e, dois potênciometros são utilizados para simular lumiosidade e pressão. Toda a exibição da leitura dos sensores é feita pelo Display de LCD.
+<embed src="http://www.youtube.com/v/tIBxavsiHzM" type="application/x-shockwave-flash" width="425" height="350" />
 </p>
-<div class="bg-video">
-    <video autoplay src="https://www.w3schools.com/html/mov_bbb.mp4"></video>
-</div>
 </div>
 
 <h4>Utilizando os switchs:</h4>
