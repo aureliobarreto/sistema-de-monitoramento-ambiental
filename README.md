@@ -145,8 +145,8 @@ $ flask run
 <h1>:video_game: Demonstração</h1>
 <h3>Estação Local</h3>
 <p>
-Para demosntrar o funcionamento da estação local, utiliza-se os botões e os switchs. A coleta dos dados é feita através do sensor DHT11 para umidade e temperatura e, dois potênciometros são utilizados para simular lumiosidade e pressão. Toda a exibição da leitura dos sensores é feita pelo Display de LCD.<br>
-<img src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/imagens/local_gif.gif"/>
+Para demosntrar o funcionamento da estação local, utiliza-se os botões e os switchs. A coleta dos dados é feita através do sensor DHT11 para umidade e temperatura e, dois potênciometros são utilizados para simular lumiosidade e pressão. Toda a exibição da leitura dos sensores é feita pelo Display de LCD.<br><br>
+<img aling="center" src="https://github.com/aureliobarreto/sistema-de-monitoramento-ambiental/blob/main/imagens/local_gif.gif"/><br>
 </p>
 </div>
 
